@@ -44,3 +44,16 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Header glassomorphism displacement
+
+Un header fixe en top a été ajouté avec un filtre SVG (`feTurbulence` + `feDisplacementMap`) pour créer un effet de dispersion des éléments qui passent en dessous. L'effet respecte la contrainte "pas de blur" et fonctionne en utilisant `backdrop-filter: url(#disp-filter)`.
+
+Pour tester en local:
+
+```powershell
+npm install
+npm run dev
+```
+
+Ouvrez le site (généralement http://localhost:5173) et faites défiler la page sous le header pour voir l'effet.

@@ -1,0 +1,79 @@
+---
+import logo from "../assets/logo.svg?raw";
+---
+
+<svg
+  style="position: absolute; width: 0; height: 0;"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <filter
+      id="disp-filter"
+      x="-150%"
+      y="-150%"
+      width="400%"
+      height="400%"
+      color-interpolation-filters="sRGB"
+    >
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.03"
+        numOctaves="2"
+        seed="0"
+        result="noise"></feTurbulence>
+      <feGaussianBlur in="noise" stdDeviation="2" result="blurredNoise"
+      ></feGaussianBlur>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="blurredNoise"
+        scale="25"
+        xChannelSelector="R"
+        yChannelSelector="G"></feDisplacementMap>
+    </filter>
+  </defs>
+</svg>
+
+<header
+  class="fixed left-1/2 top-[2dvw] -translate-x-1/2 z-50 w-[90%] max-w-4xl flex items-center rounded-full backdrop-blur border border-white/10 bg-black shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)]"
+  style="background: linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.4), rgba(0,0,0,0.35)), linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.6) 100%); backdrop-filter: blur(8px) url(#disp-filter);"
+>
+  <div class="w-full flex items-center justify-between gap-8 p-[0.5dvw] pl-3">
+    <a
+      href="#accueil"
+      class="shrink-0 hover:opacity-80 transition-opacity h-full flex items-center [&_svg]:w-full [&_svg]:h-full [&_svg]:max-w-10 [&_svg]:max-h-10"
+    >
+      <Fragment set:html={logo} />
+    </a>
+
+    <nav class="flex gap-6 flex-1 justify-center">
+      <a
+        href="#accueil"
+        class="text-white/80 text-sm font-medium hover:text-white transition-colors"
+        >Accueil</a
+      >
+      <a
+        href="#a-propos"
+        class="text-white/80 text-sm font-medium hover:text-white transition-colors"
+        >À Propos</a
+      >
+      <a
+        href="#competences"
+        class="text-white/80 text-sm font-medium hover:text-white transition-colors"
+        >Compétences</a
+      >
+      <a
+        href="#projets"
+        class="text-white/80 text-sm font-medium hover:text-white transition-colors"
+        >Projets</a
+      >
+    </nav>
+
+    <a
+      href="#contact"
+      class="shrink-0 bg-violet-600 hover:bg-violet-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition-colors"
+    >
+      Contact
+    </a>
+  </div>
+</header>
