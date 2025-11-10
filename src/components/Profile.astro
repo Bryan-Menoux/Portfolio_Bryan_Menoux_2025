@@ -1,0 +1,184 @@
+---
+import grilles from "../assets/grilles.webp";
+import Photo from "../assets/bryan-menoux.webp";
+import DiagArrow from "../assets/diag-arrow.svg";
+---
+
+<script is:inline>
+  if (typeof window !== "undefined") {
+    const wireSkillButton = () => {
+      document.querySelectorAll(".btn-skill-link").forEach((link) => {
+        const container = link.closest(".skill-container");
+        if (!container || link.dataset.hoverReady === "true") return;
+
+        link.dataset.hoverReady = "true";
+
+        link.addEventListener("mouseenter", () => {
+          container.classList.add("skill-container--cta-hover");
+        });
+
+        link.addEventListener("mouseleave", () => {
+          container.classList.remove("skill-container--cta-hover");
+        });
+      });
+    };
+
+    if (document.readyState === "loading") {
+      window.addEventListener("DOMContentLoaded", wireSkillButton, {
+        once: true,
+      });
+    } else {
+      wireSkillButton();
+    }
+  }
+</script>
+
+<div
+  class="w-full h-fit bg-center bg-cover flex flex-col items-center py-16 md:py-24 lg:py-32 relative"
+  id="first"
+  style={`background-image: url(${grilles.src});`}
+>
+  <h2 class="h2 relative z-10">
+    &lt;A <span class="text-primary">PROPOS</span> /&gt;
+  </h2>
+  <div
+    class="max-w-7xl grid gap-4 mt-8 md:mt-10 lg:mt-12 px-4 w-full min-h-[40dvh] md:min-h-[55dvh] lg:h-[70dvh] relative z-10 grid-cols-1 lg:grid-cols-3"
+  >
+    <div
+      class="w-full h-[40dvh] md:h-[52dvh] lg:h-full rounded-3xl overflow-hidden relative flex items-center justify-center"
+      style="background: radial-gradient(circle at center, #7665F3 0%, #7665F3 38%, #4C39D8 100%);"
+    >
+      <div class="noise"></div>
+      <div class="relative z-10 h-full w-full flex items-center justify-center">
+        <img
+          src={Photo.src}
+          alt="Photographie de Bryan Menoux"
+          loading="lazy"
+          class="h-full w-full max-w-[420px] object-cover"
+          style="object-position: center 10%; border-radius: inherit;"
+        />
+      </div>
+    </div>
+
+    <div class="w-full h-auto flex flex-col gap-4 lg:col-span-2">
+      <div
+        class="w-full h-64 md:h-96 lg:h-1/2 rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px]"
+      >
+        <div
+          class="absolute inset-0"
+          style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.6) 0%, rgba(53, 63, 82, 0.6) 38%, rgba(45, 54, 71, 0.6) 100%);"
+        >
+        </div>
+        <div class="noise absolute inset-0"></div>
+        <div
+          class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 to-transparent"
+        >
+        </div>
+        <div
+          class="relative z-20 w-full h-full p-6 md:p-8 flex flex-col justify-between"
+        >
+          <p class="max-w-[90%] md:max-w-[85%] text-sm md:text-base lg:text-lg">
+            Je suis Bryan, développeur web passionné par la création
+            d'expériences numériques modernes et efficaces. Curieux et
+            rigoureux, j'aime relever des défis techniques et transformer des
+            idées en solutions concrètes. Mon objectif : concevoir des projets
+            utiles, élégants et accessibles.
+          </p>
+          <div
+            class="flex flex-col md:flex-row gap-4 justify-between md:items-center"
+          >
+            <h2 class="h3 text-base md:text-lg lg:text-xl">Qui suis-je ?</h2>
+            <a
+              href="/a-propos"
+              class="btn btn-primary rounded-full w-full md:w-auto lg:min-w-[300px]"
+            >
+              En savoir plus sur moi
+              <img src={DiagArrow.src} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="w-full h-fit md:h-96 lg:h-1/2 flex flex-col md:flex-row gap-4"
+      >
+        <div
+          class="skill-container w-full h-fit md:h-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col justify-between p-6 md:p-8 transition-all duration-300"
+          style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.6) 0%, rgba(53, 63, 82, 0.6) 38%, rgba(45, 54, 71, 0.6) 100%);"
+        >
+          <div class="noise absolute inset-0"></div>
+          <div
+            class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 to-transparent"
+          >
+          </div>
+          <p
+            class="max-w-[90%] md:max-w-[85%] text-sm md:text-base lg:text-lg relative z-20"
+          >
+            Front et back, je travaille avec des technologies modernes pour
+            concevoir des interfaces intuitives et des applications performantes
+          </p>
+          <div
+            class="flex flex-col md:flex-row gap-4 justify-between md:items-center md:flex-wrap w-full relative z-20"
+          >
+            <h2
+              class="h3 text-base md:text-lg lg:text-xl transition-all duration-300"
+            >
+              Mes Compétences
+            </h2>
+            <a
+              href="#competences"
+              class="btn-skill-link btn btn-primary rounded-full relative flex gap-3 md:gap-0 md:group-hover:gap-3 w-full md:w-10 h-10 md:hover:h-10 justify-between md:justify-center items-center transition-[width,background-color,transform] duration-[450ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:justify-between md:hover:w-full group md:ml-auto"
+            >
+              <span
+                class="text opacity-100 max-w-[200px] md:opacity-0 md:max-w-0 overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-[450ms] ease-out md:group-hover:opacity-100 md:group-hover:max-w-[200px]"
+              >
+                En savoir plus
+              </span>
+              <span
+                class="icon flex-shrink-0 flex items-center justify-center w-10 h-10 p-2 order-2 transition-all duration-[400ms] cubic-bezier(0.34, 1.56, 0.64, 1) group-hover:translate-x-1.5"
+              >
+                <img src={DiagArrow.src} aria-hidden="true" />
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="skill-container contact-container w-full h-fit md:h-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col justify-between p-6 md:p-8 transition-all duration-300"
+          style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.6) 0%, rgba(53, 63, 82, 0.6) 38%, rgba(45, 54, 71, 0.6) 100%);"
+        >
+          <div class="noise absolute inset-0"></div>
+          <div
+            class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 to-transparent"
+          >
+          </div>
+          <p
+            class="max-w-[90%] md:max-w-[85%] text-sm md:text-base lg:text-lg relative z-20"
+          >
+            Une idée, un projet ou une opportunité ? Écrivez-moi et échangeons.
+          </p>
+          <div
+            class="flex flex-col md:flex-row gap-4 justify-between md:items-center md:flex-wrap w-full relative z-20"
+          >
+            <h2 class="h3 text-base md:text-lg lg:text-xl">Contact</h2>
+            <a
+              href="#contact"
+              class="btn-skill-link btn btn-primary rounded-full relative flex gap-3 md:gap-0 md:group-hover:gap-3 w-full md:w-10 h-10 md:hover:h-10 justify-between md:justify-center items-center transition-[width,background-color,transform] duration-[450ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:justify-between md:hover:w-full group md:ml-auto"
+            >
+              <span
+                class="text opacity-100 max-w-[200px] md:opacity-0 md:max-w-0 overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-[450ms] ease-out md:group-hover:opacity-100 md:group-hover:max-w-[200px]"
+              >
+                Me contacter
+              </span>
+              <span
+                class="icon flex-shrink-0 flex items-center justify-center w-10 h-10 p-2 order-2 transition-all duration-[400ms] cubic-bezier(0.34, 1.56, 0.64, 1) group-hover:translate-x-1.5"
+              >
+                <img src={DiagArrow.src} aria-hidden="true" />
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
