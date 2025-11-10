@@ -1,0 +1,29 @@
+---
+import ParticleBlob from "../components/ParticleBlob.jsx";
+import TypingEffect from "../components/TypingEffect.astro";
+import arrowDown from "../assets/arrow-down.svg";
+---
+
+<div class="w-full h-screen flex items-center justify-center">
+  <div
+    class="w-[95dvw] h-[95dvh] rounded-4xl flex items-center justify-center relative overflow-hidden"
+    style="background: radial-gradient(circle at center -80%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 60%, rgba(80, 50, 200, 0.4) 70%, rgba(118, 95, 243, 0.6) 75%, rgba(118, 95, 243, 0.8) 83%, rgba(118, 95, 243, 1) 100%)"
+  >
+    <ParticleBlob client:load />
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+    >
+      <TypingEffect />
+    </div>
+  </div>
+  <a
+    href="#first"
+    class="absolute bottom-16 left-1/2 -translate-x-1/2 translate-y-full"
+  >
+    <img
+      src={arrowDown.src}
+      alt="arrow down"
+      class="w-10 h-10 animate-bounce"
+    />
+  </a>
+</div>

@@ -1,0 +1,65 @@
+---
+
+---
+
+<div class="relative inline-flex items-end">
+  <div class="text-4xl md:text-6xl font-bold text-white leading-none">
+    <span class="text-white" id="displayText"></span>
+    <span
+      class="inline-block w-1 bg-white transition-opacity"
+      id="cursor"
+      style="height: 0.8em;"></span>
+  </div>
+</div>
+
+<script>
+  const words = ["CODE", "CRÉATION", "ADAPTATION"];
+  let displayText = "";
+  let wordIndex = 0;
+  let isDeleting = false;
+  let showCursor = true;
+
+  const typingSpeed = 100;
+  const deletingSpeed = 50;
+  const delayBetweenWords = 2000;
+  const cursorBlinkSpeed = 500;
+
+  const displayTextEl = document.getElementById("displayText");
+  const cursorEl = document.getElementById("cursor");
+
+  setInterval(() => {
+    showCursor = !showCursor;
+    if (cursorEl) {
+      cursorEl.classList.toggle("opacity-0");
+    }
+  }, cursorBlinkSpeed);
+
+  function type() {
+    const currentWord = words[wordIndex];
+
+    if (!isDeleting) {
+      if (displayText.length < currentWord.length) {
+        displayText = currentWord.slice(0, displayText.length + 1);
+        if (displayTextEl) displayTextEl.textContent = displayText;
+        setTimeout(type, typingSpeed);
+      } else {
+        setTimeout(() => {
+          isDeleting = true;
+          type();
+        }, delayBetweenWords);
+      }
+    } else {
+      if (displayText.length > 0) {
+        displayText = displayText.slice(0, -1);
+        if (displayTextEl) displayTextEl.textContent = displayText;
+        setTimeout(type, deletingSpeed);
+      } else {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        setTimeout(type, typingSpeed);
+      }
+    }
+  }
+
+  type();
+</script>

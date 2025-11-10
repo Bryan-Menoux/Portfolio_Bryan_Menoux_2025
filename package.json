@@ -3,20 +3,27 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-  "dev": "astro dev",
-  "build": "astro build",
-  "preview": "astro preview",
-  "astro": "astro",
-  "test:theme": "node ./scripts/test-theme.js"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test:theme": "node ./scripts/test-theme.js"
   },
   "dependencies": {
+    "@astrojs/react": "^4.4.2",
     "@tailwindcss/vite": "^4.1.16",
     "astro": "^5.15.3",
     "daisyui": "^5.3.10",
-    "tailwindcss": "^4.1.16"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.16",
+    "three": "^0.181.1"
   },
   "description": "```sh npm create astro@latest -- --template basics ```",
   "main": "index.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/three": "^0.181.0"
+  }
 }
