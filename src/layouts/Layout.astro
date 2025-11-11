@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
-import Logo from "../assets/logo.svg";
+import logoSvg from "../assets/logo.svg";
 
 interface Props {
   title?: string;
@@ -15,8 +15,8 @@ const { title = "Portfolio Bryan Menoux" } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href={Logo.src} type="image/x-icon" />
+    <link rel="icon" type="image/svg+xml" href={logoSvg.src} />
+    <link rel="shortcut icon" href="/logo.svg" type="image/x-icon" />
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
