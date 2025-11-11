@@ -25,16 +25,6 @@ jobs:
         run: |
           npm run build
           cp package.json dist/server/
-      - name: Test SSH authentication (debug)
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22007
-          script: |
-            echo "✅ Connexion SSH réussie, accès autorisé"
-
       - name: Deploy to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
@@ -60,4 +50,4 @@ jobs:
             npm ci
             npm install astro
             npm install send server-destroy
-            PORT=8091 pm2 restart portfolio || PORT=8091 pm2 start entry.mjs --name portfolio
+            PORT=8084 pm2 restart portfolio || PORT=8084 pm2 start entry.mjs --name portfolio
