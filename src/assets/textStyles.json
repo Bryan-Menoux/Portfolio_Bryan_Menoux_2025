@@ -1,0 +1,104 @@
+{
+  "fileName": "Projet individuel Bryan Menoux MM1 B",
+  "textStyles": [
+    {
+      "name": "H1",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 64,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "UPPER"
+    },
+    {
+      "name": "H2",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 40,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "UPPER"
+    },
+    {
+      "name": "H3",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 28,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "H4",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 20,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "main",
+      "fontFamily": "Poppins",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "H1-mobile",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 48,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "UPPER"
+    },
+    {
+      "name": "H2-mobile",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 32,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "UPPER"
+    },
+    {
+      "name": "H3-mobile",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 20,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "UPPER"
+    },
+    {
+      "name": "H4-mobile",
+      "fontFamily": "Sora",
+      "fontWeight": "Bold",
+      "fontSize": 18,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "UPPER"
+    }
+  ]
+}

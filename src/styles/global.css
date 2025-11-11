@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+html {
+  background-color: #060709;
+  scroll-behavior: smooth;
+}
+
 @theme {
   /* Base colors - Dark theme */
   --color-base-100: oklch(14% 0.004 49.25);
@@ -47,4 +52,89 @@
   --border: 1px;
   --depth: 1;
   --noise: 1;
+
+  /* Font families */
+  --font-sora: "Sora", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+}
+
+/* Text Styles */
+@layer components {
+  /* H1 - Desktop */
+  .h1 {
+    @apply font-bold text-[64px] leading-tight uppercase tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  /* H2 - Desktop */
+  .h2 {
+    @apply font-bold text-[40px] leading-tight uppercase tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  /* H3 - Desktop */
+  .h3 {
+    @apply font-bold text-[28px] leading-tight tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  /* H4 - Desktop */
+  .h4 {
+    @apply font-bold text-[20px] leading-tight tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  /* Main Text */
+  .main-text {
+    @apply font-normal text-[16px] leading-relaxed tracking-normal;
+    font-family: var(--font-poppins);
+  }
+
+  /* H1 - Mobile */
+  .h1-mobile {
+    @apply font-bold text-[48px] leading-tight uppercase tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  /* H2 - Mobile */
+  .h2-mobile {
+    @apply font-bold text-[32px] leading-tight uppercase tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  /* H3 - Mobile */
+  .h3-mobile {
+    @apply font-bold text-[20px] leading-tight uppercase tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  /* H4 - Mobile */
+  .h4-mobile {
+    @apply font-bold text-[18px] leading-tight uppercase tracking-normal;
+    font-family: var(--font-sora);
+  }
+
+  .noise {
+    @apply absolute inset-0 pointer-events-none;
+    background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><filter id=%22noise%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.5%22 numOctaves=%222%22 result=%22noise%22/></filter><rect width=%22100%22 height=%22100%22 filter=%22url(%23noise)%22 opacity=%220.15%22 fill=%22%23000000%22/><rect width=%22100%22 height=%22100%22 filter=%22url(%23noise)%22 opacity=%220.1%22 fill=%22%23FFFFFF%22/></svg>");
+    mix-blend-mode: overlay;
+  }
+
+  .skill-container--cta-hover .btn-skill-link {
+    width: 100%;
+    flex: 1 1 100%;
+    max-width: 100%;
+    border-radius: 1.5rem;
+    justify-content: space-between;
+    padding-inline: 1.5rem;
+  }
+
+  .skill-container--cta-hover .btn-skill-link .text {
+    opacity: 1;
+    width: auto;
+  }
+
+  .skill-container--cta-hover .btn-skill-link .icon {
+    transform: translateX(0.375rem);
+  }
 }
