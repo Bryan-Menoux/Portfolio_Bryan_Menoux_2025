@@ -25,20 +25,19 @@ jobs:
         run: |
           npm run build
           cp package.json dist/server/
-      - name: Deploy via manual SCP (safe)
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Deploy to VPS via SCP
+        uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
-          script_stop: false
-          script: |
-            echo "🚀 Déploiement sans suppression en cours..."
-            mkdir -p /var/www/portfolio
-            rsync -avz --ignore-times --update --progress dist/ /var/www/portfolio/
-            echo "✅ Fichiers mis à jour sans suppression."
-
+          source: "dist/*"
+          target: "/var/www/portfolio/"
+          strip_components: 1
+          rm: false
+          overwrite: true
+          debug: true
       - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
