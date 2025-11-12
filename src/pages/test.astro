@@ -1,1 +1,410 @@
-<p>ceci est un test</p>
+---
+const title = "Contactez-nous";
+
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <section class="contact-container" aria-labelledby="contact-title">
+    <div class="contact-header">
+      <h1 id="contact-title">{title}</h1>
+      <p class="subtitle">Nous répondons généralement dans les 24 heures</p>
+    </div>
+
+    <form id="contactForm" class="contact-form" novalidate>
+      <div class="form-group">
+        <label for="name">Nom complet <span class="required">*</span></label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          autocomplete="name"
+          placeholder="Jean Dupont"
+          minlength="2"
+        />
+        <span class="error-message" id="name-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Adresse email <span class="required">*</span></label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          placeholder="votre@email.com"
+        />
+        <span class="error-message" id="email-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Sujet <span class="required">*</span></label>
+        <select id="subject" name="subject" required>
+          <option value="">Sélectionnez un sujet...</option>
+          <option value="general">Question générale</option>
+          <option value="support">Support technique</option>
+          <option value="commercial">Demande commerciale</option>
+          <option value="other">Autre</option>
+        </select>
+        <span class="error-message" id="subject-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message <span class="required">*</span></label>
+        <textarea
+          id="message"
+          name="message"
+          rows="6"
+          required
+          placeholder="Décrivez votre message ici..."
+          minlength="10"></textarea>
+        <span class="char-count"><span id="char-count">0</span>/500</span>
+        <span class="error-message" id="message-error"></span>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+
+      <div class="actions">
+        <button type="submit" class="btn-submit">
+          <span>Envoyer le message</span>
+        </button>
+        <button type="reset" class="btn-reset">Effacer</button>
+      </div>
+    </form>
+  </section>
+</Layout>
+<style>
+  .contact-container {
+    max-width: 680px;
+    margin: 3rem auto;
+    padding: 2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    font-family:
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .contact-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #666;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .required {
+    color: #dc3545;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.3s ease;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: #0366d6;
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+  }
+
+  input:invalid:not(:placeholder-shown),
+  textarea:invalid:not(:placeholder-shown),
+  select:invalid {
+    border-color: #dc3545;
+  }
+
+  input:valid:not(:placeholder-shown),
+  textarea:valid:not(:placeholder-shown),
+  select:valid {
+    border-color: #28a745;
+  }
+
+  .error-message {
+    font-size: 0.85rem;
+    color: #dc3545;
+    display: none;
+  }
+
+  .error-message.show {
+    display: block;
+  }
+
+  .char-count {
+    font-size: 0.85rem;
+    color: #999;
+    text-align: right;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    flex: 1;
+  }
+
+  .btn-submit {
+    background: linear-gradient(135deg, #0366d6 0%, #0254b0 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(3, 102, 214, 0.3);
+  }
+
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn-reset {
+    background: #f3f4f6;
+    color: #333;
+    border: 2px solid #e0e0e0;
+  }
+
+  .btn-reset:hover {
+    background: #e9ecef;
+    border-color: #ccc;
+  }
+
+  .status {
+    margin: 0;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    min-height: 1.2rem;
+    display: none;
+  }
+
+  .status.show {
+    display: block;
+  }
+
+  .status.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .status.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .status.loading {
+    background: #cfe2ff;
+    color: #084298;
+    border: 1px solid #b6d4fe;
+  }
+
+  input.has-error,
+  textarea.has-error,
+  select.has-error {
+    border-color: #dc3545 !important;
+    background-color: rgba(220, 53, 69, 0.05);
+  }
+
+  @media (max-width: 600px) {
+    .contact-container {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .actions {
+      flex-direction: column;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+</style>
+
+<script type="module">
+  const form = document.getElementById("contactForm");
+  const statusEl = document.getElementById("status");
+  const charCountEl = document.getElementById("char-count");
+  const messageEl = document.getElementById("message");
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  // Validation des champs
+  const validators = {
+    name: (value) => {
+      if (!value.trim()) return "Le nom est requis";
+      if (value.length < 2) return "Le nom doit contenir au moins 2 caractères";
+      return null;
+    },
+    email: (value) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!value.trim()) return "L'email est requis";
+      if (!emailRegex.test(value)) return "Email invalide";
+      return null;
+    },
+    subject: (value) => {
+      if (!value) return "Veuillez sélectionner un sujet";
+      return null;
+    },
+    message: (value) => {
+      if (!value.trim()) return "Le message est requis";
+      if (value.length < 10)
+        return "Le message doit contenir au moins 10 caractères";
+      if (value.length > 500)
+        return "Le message ne doit pas dépasser 500 caractères";
+      return null;
+    },
+  };
+
+  // Compteur de caractères
+  messageEl.addEventListener("input", () => {
+    charCountEl.textContent = messageEl.value.length;
+  });
+
+  // Validation en temps réel
+  form.addEventListener("input", (e) => {
+    const field = e.target;
+    if (field.name in validators) {
+      const error = validators[field.name](field.value);
+      const errorEl = document.getElementById(`${field.name}-error`);
+
+      if (error) {
+        errorEl.textContent = error;
+        errorEl.classList.add("show");
+        field.classList.add("has-error");
+      } else {
+        errorEl.classList.remove("show");
+        field.classList.remove("has-error");
+      }
+    }
+  });
+
+  // Soumission du formulaire
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Validation finale
+    let isValid = true;
+    for (const [fieldName, validator] of Object.entries(validators)) {
+      const field = form.elements[fieldName];
+      const error = validator(field.value);
+      const errorEl = document.getElementById(`${fieldName}-error`);
+
+      if (error) {
+        errorEl.textContent = error;
+        errorEl.classList.add("show");
+        field.classList.add("has-error");
+        isValid = false;
+      }
+    }
+
+    if (!isValid) return;
+
+    const data = Object.fromEntries(new FormData(form));
+
+    // Afficher le statut de chargement
+    statusEl.classList.add("show", "loading");
+    statusEl.textContent = "Envoi du message...";
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        statusEl.classList.remove("loading");
+        statusEl.classList.add("success");
+        statusEl.textContent =
+          "✓ Message envoyé avec succès ! Merci de nous avoir contacté.";
+        form.reset();
+        charCountEl.textContent = "0";
+        document
+          .querySelectorAll(".error-message")
+          .forEach((el) => el.classList.remove("show"));
+        document
+          .querySelectorAll("input, textarea, select")
+          .forEach((el) => el.classList.remove("has-error"));
+      } else {
+        const json = await res.json().catch(() => ({}));
+        statusEl.classList.remove("loading");
+        statusEl.classList.add("error");
+        statusEl.textContent =
+          "✗ Erreur : " + (json.message || res.statusText || res.status);
+      }
+    } catch (err) {
+      statusEl.classList.remove("loading");
+      statusEl.classList.add("error");
+      statusEl.textContent = "✗ Erreur réseau. Veuillez réessayer.";
+      console.error("Contact form error:", err);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
