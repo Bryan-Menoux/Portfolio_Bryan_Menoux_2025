@@ -50,7 +50,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/"
+          source: "dist/*"
           target: "/var/www/portfolio/"
           rm: false # on a déjà supprimé manuellement, inutile de le refaire ici
           overwrite: true
