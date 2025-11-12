@@ -51,15 +51,15 @@ jobs:
           port: 22007
           script: |
             echo "🔐 Application des permissions..."
-            mkdir -p /var/www/portfolio
-            chown -R etudiant:etudiant /var/www/portfolio
-            chmod -R 777 /var/www/portfolio
+            sudo mkdir -p /var/www/portfolio
+            sudo chown -R etudiant:etudiant /var/www/portfolio
+            sudo chmod -R 777 /var/www/portfolio
 
             echo "📦 Installation des dépendances de production..."
-            cd /var/www/portfolio/server
-            npm install
-            npm ci --omit=dev
-            npm install astro send server-destroy react react-dom
+            sudo cd /var/www/portfolio/server
+            sudo npm install
+            sudo npm ci --omit=dev
+            sudo npm install astro send server-destroy react react-dom
 
             echo "🚀 (Re)démarrage du service PM2..."
             PORT=8092 pm2 restart portfolio || PORT=8092 pm2 start entry.mjs --name portfolio
