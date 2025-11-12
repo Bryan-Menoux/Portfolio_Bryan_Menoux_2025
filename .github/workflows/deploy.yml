@@ -18,31 +18,27 @@ jobs:
           node-version: "18"
           cache: "npm"
 
-      # Installation complète des dépendances avant build
       - name: Install dependencies
-        run: |
-          npm install
-          npm ci
+        run: npm ci
 
       - name: Build project
         run: |
           npm run build
           cp package.json dist/server/
 
-      # Déploiement du build sur le VPS (avec suppression préalable)
       - name: Deploy to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/**"
+          source: "dist/*"
           target: "/var/www/portfolio/"
-          rm: true
+          strip_components: 1
+          rm: false
           overwrite: true
           debug: true
 
-      # Installation des dépendances de production sur le serveur et redémarrage PM2
       - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -51,7 +47,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/portfolio/server
-            npm install --omit=dev
-            npm install astro react react-dom @astrojs/react send server-destroy
-            HOST=:: PORT=8081 pm2 restart portfolio --cwd /var/www/portfolio/server || HOST=:: PORT=8081 pm2 start entry.mjs --name portfolio --cwd /var/www/portfolio/server
-            pm2 save
+            npm ci
+            npm install astro
+            npm install send server-destroy
+            PORT=8081 pm2 restart portfolio || PORT=8081 pm2 start entry.mjs --name portfolio
