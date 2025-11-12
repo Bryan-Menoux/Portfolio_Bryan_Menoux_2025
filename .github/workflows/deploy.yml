@@ -25,29 +25,21 @@ jobs:
         run: |
           npm run build
           cp package.json dist/server/
-      - name: Sync client & server to VPS (with cleanup)
+      - name: Déploiement sur le VPS via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22007
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
           script: |
-            echo "🚀 Synchronisation du contenu GitHub → VPS (/var/www/portfolio)"
+            echo "🚀 Déploiement du portfolio..."
             if ! command -v rsync &> /dev/null; then
               echo "⚙️ Installation de rsync sur le VPS..."
               sudo apt update && sudo apt install -y rsync
             fi
-
-            # Synchronisation du dossier client
-            echo "📁 Synchronisation du dossier client..."
-            rsync -avz --delete /github/workspace/client/ /var/www/portfolio/client/
-
-            # Synchronisation du dossier server
-            echo "📁 Synchronisation du dossier server..."
-            rsync -avz --delete /github/workspace/server/ /var/www/portfolio/server/
-
-            echo "✅ Synchronisation terminée. Tous les fichiers obsolètes ont été supprimés."
+            echo "📂 Synchronisation complète avec le dépôt GitHub..."
+            rsync -avz --delete --exclude='.git/' --exclude='node_modules/' /github/workspace/ /var/www/portfolio/
+            echo "✅ Synchronisation terminée !"
 
       - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
