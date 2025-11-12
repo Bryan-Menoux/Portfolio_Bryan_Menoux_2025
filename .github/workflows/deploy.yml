@@ -33,19 +33,19 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           script: |
-            echo "🚀 Déploiement en cours (synchronisation complète du contenu dist vers /var/www/portfolio)..."
+            echo "🚀 Déploiement en cours (mise à jour des dossiers client et server dans /var/www/portfolio)..."
             if ! command -v rsync &> /dev/null; then
               echo "⚙️ Installation de rsync sur le VPS..."
               sudo apt update && sudo apt install -y rsync
             fi
-            mkdir -p /var/www/portfolio
-            cd /github/workspace
-            if [ ! -d "dist" ]; then
-              echo "❌ Erreur : le dossier 'dist' est introuvable dans le runner GitHub."
-              exit 1
-            fi
-            rsync -avz --delete --progress dist/ /var/www/portfolio/
-            echo "✅ Fichiers mis à jour et synchronisés avec succès."
+
+            mkdir -p /var/www/portfolio/client
+            mkdir -p /var/www/portfolio/server
+
+            rsync -avz --delete --progress client/ /var/www/portfolio/client/
+            rsync -avz --delete --progress server/ /var/www/portfolio/server/
+
+            echo "✅ Dossiers client et server mis à jour avec succès."
 
       - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
