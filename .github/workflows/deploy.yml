@@ -23,6 +23,8 @@ jobs:
           npm i
           npm install react react-dom
           npm ci
+          chmod 777 /var/www/portfolio/
+          
 
       - name: Build project
         run: |
