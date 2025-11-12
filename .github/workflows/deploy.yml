@@ -62,5 +62,6 @@ jobs:
             sudo npm install astro send server-destroy react react-dom
 
             echo "🚀 (Re)démarrage du service PM2..."
+            sudo cd /var/www/portfolio/server
             PORT=8092 pm2 restart portfolio || PORT=8092 pm2 start entry.mjs --name portfolio
             echo "✅ Déploiement terminé avec succès."
