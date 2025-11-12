@@ -30,33 +30,36 @@ jobs:
           npm run build
           cp package.json dist/server/
 
-      # 3️⃣ Supprimer complètement l’ancien dossier distant avant déploiement
+      # 3️⃣ Suppression complète du dossier distant
       - name: Clean remote directory before deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
           script: |
             echo "🧹 Suppression complète de /var/www/portfolio..."
-            sudo rm -rf /var/www/portfolio
+            rm -rf /var/www/portfolio || true
             mkdir -p /var/www/portfolio
-            echo "✅ Dossier recréé proprement."
+            ls -la /var/www/
+            echo "✅ Dossier /var/www/portfolio recréé."
 
-      # 4️⃣ Déploiement du build Astro complet
+      # 4️⃣ Envoi du build complet
       - name: Deploy build to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/*"
+          source: "dist/"
           target: "/var/www/portfolio/"
-          rm: false # on a déjà supprimé manuellement, inutile de le refaire ici
+          strip_components: 0
+          rm: false
           overwrite: true
           debug: true
 
-      # 5️⃣ Installation des dépendances de production et relance PM2
+      # 5️⃣ Installation des dépendances de production et redémarrage PM2
       - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
