@@ -9,25 +9,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: "npm"
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: 🏗️ Build project
+      - name: Build project
         run: |
           npm run build
           cp package.json dist/server/
-
-      # Étape unique : suppression + transfert
-      - name: 📤 Deploy to VPS via SCP (clean + upload)
+      - name: Deploy to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
@@ -35,14 +33,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           source: "dist/*"
-          target: "/var/www/portfolio"
+          target: "/var/www/portfolio/"
+          strip_components: 1
+          rm: false
           overwrite: true
-          rm: true # ← supprime le dossier distant avant transfert
-          strip_components: 0
           debug: true
-
-      # Étape post-déploiement : permissions + PM2
-      - name: 🧩 Set permissions and restart PM2
+      - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
@@ -50,18 +46,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           script: |
-            echo "🔐 Application des permissions..."
-            sudo mkdir -p /var/www/portfolio
-            sudo chown -R etudiant:etudiant /var/www/portfolio
-            sudo chmod -R 777 /var/www/portfolio
-
-            echo "📦 Installation des dépendances de production..."
-            sudo cd /var/www/portfolio/server
-            sudo npm install
-            sudo npm ci --omit=dev
-            sudo npm install astro send server-destroy react react-dom
-
-            echo "🚀 (Re)démarrage du service PM2..."
-            sudo cd /var/www/portfolio/server
+            cd /var/www/portfolio/server
+            npm ci
+            npm install astro
+            npm install send server-destroy
             PORT=8092 pm2 restart portfolio || PORT=8092 pm2 start entry.mjs --name portfolio
-            echo "✅ Déploiement terminé avec succès."
