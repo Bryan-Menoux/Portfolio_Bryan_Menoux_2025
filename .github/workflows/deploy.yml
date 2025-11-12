@@ -9,26 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 🧾 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: "npm"
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: |
+          npm install
           npm ci
           npm install react react-dom
 
-      - name: Build project
+      - name: 🏗️ Build project
         run: |
           npm run build
           cp package.json dist/server/
 
-      - name: 🧹 Remove and recreate /var/www/portfolio on VPS
+      - name: 🧹 Clean old build on VPS (client + server only)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
@@ -36,13 +37,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           script: |
-            echo "🧹 Suppression de l'ancien dossier..."
-            sudo rm -rf /var/www/portfolio
-            echo "📁 Création du nouveau dossier..."
+            echo "🧹 Suppression des anciens dossiers client et server..."
+            sudo rm -rf /var/www/portfolio/client
+            sudo rm -rf /var/www/portfolio/server
+            echo "📁 Vérification / création du dossier portfolio..."
             sudo mkdir -p /var/www/portfolio
             sudo chown -R etudiant:www-data /var/www/portfolio
             sudo chmod -R 755 /var/www/portfolio
-            echo "✅ Dossier prêt à recevoir le site."
+            echo "✅ Le dossier portfolio est prêt à recevoir la nouvelle version."
 
       - name: 🚀 Deploy build to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
@@ -65,8 +67,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           script: |
-            cd /var/www/portfolio/server
             echo "📦 Installation des dépendances de production..."
+            cd /var/www/portfolio/server
             npm ci --omit=dev
             npm install astro send server-destroy
             echo "🚀 (Re)démarrage du service PM2..."
