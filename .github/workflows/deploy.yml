@@ -17,30 +17,28 @@ jobs:
         with:
           node-version: "18"
           cache: "npm"
+
       - name: 📦 Install dependencies
-        run: |
-          npm install
-          npm ci
-          npm install react react-dom
+        run: npm ci
 
       - name: 🏗️ Build project
         run: |
           npm run build
           cp package.json dist/server/
 
-      - name: Deploy to VPS via SCP
+      - name: 📤 Deploy to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
-          source: "dist/*"
-          target: "/var/www/portfolio/"
-          strip_components: 1
-          rm: true
+          source: "dist/**"
+          target: "/var/www/portfolio"
           overwrite: true
           debug: true
+          rm: false # on garde le dossier, plus sûr
+          strip_components: 0 # on conserve l’arborescence dist/
 
       - name: 🧩 Install production dependencies & restart PM2
         uses: appleboy/ssh-action@v1.0.0
@@ -50,12 +48,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           script: |
+            echo "📁 Vérification du dossier distant..."
+            mkdir -p /var/www/portfolio/server
+
             echo "📦 Installation des dépendances de production..."
             cd /var/www/portfolio/server
-            npm install
             npm ci --omit=dev
-            npm install react react-dom
-            npm install astro send server-destroy
+            npm install astro send server-destroy react react-dom
+
             echo "🚀 (Re)démarrage du service PM2..."
             PORT=8092 pm2 restart portfolio || PORT=8092 pm2 start entry.mjs --name portfolio
             echo "✅ Déploiement terminé avec succès."
