@@ -15,11 +15,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "18"
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build project
         run: |
@@ -32,6 +32,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22007
           source: "dist/*"
           target: "/var/www/portfolio/"
           strip_components: 1
@@ -39,40 +40,16 @@ jobs:
           overwrite: true
           debug: true
 
-      - name: Install and run project on VPS
+      - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22007
           script: |
             cd /var/www/portfolio/server
-
-            # Installer Node.js si absent
-            if ! command -v node &> /dev/null; then
-              echo "Node.js absent, installation..."
-              sudo apt update -y
-              sudo apt install -y curl
-              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-              sudo apt install -y nodejs
-            fi
-
-            # Vérifie et installe npm si besoin
-            if ! command -v npm &> /dev/null; then
-              echo "npm absent, installation..."
-              sudo apt install -y npm
-            fi
-
-            # Vérifie et installe PM2 globalement
-            if ! command -v pm2 &> /dev/null; then
-              echo "PM2 absent, installation globale..."
-              sudo npm install -g pm2
-            fi
-
-            # Installe les dépendances du projet (dans /server)
-            echo "Installation des dépendances du projet..."
-            npm install
-
-            # Démarre ou redémarre le processus PM2
-            echo "Redémarrage de l'application..."
+            npm ci
+            npm install astro
+            npm install send server-destroy
             PORT=8081 pm2 restart portfolio || PORT=8081 pm2 start entry.mjs --name portfolio
