@@ -20,18 +20,31 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo mkdir /var/www/portfolio
-          sudo chmod 777 /var/www/portfolio/
-          sudo chown -R etudiant:www-data /var/www/portfolio
-          npm i
-          npm install react react-dom
           npm ci
+          npm install react react-dom
 
       - name: Build project
         run: |
           npm run build
           cp package.json dist/server/
-      - name: Deploy to VPS via SCP
+
+      - name: 🧹 Remove and recreate /var/www/portfolio on VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22007
+          script: |
+            echo "🧹 Suppression de l'ancien dossier..."
+            sudo rm -rf /var/www/portfolio
+            echo "📁 Création du nouveau dossier..."
+            sudo mkdir -p /var/www/portfolio
+            sudo chown -R etudiant:www-data /var/www/portfolio
+            sudo chmod -R 755 /var/www/portfolio
+            echo "✅ Dossier prêt à recevoir le site."
+
+      - name: 🚀 Deploy build to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
@@ -41,10 +54,10 @@ jobs:
           source: "dist/*"
           target: "/var/www/portfolio/"
           strip_components: 1
-          rm: true
           overwrite: true
           debug: true
-      - name: Install production dependencies on VPS
+
+      - name: 🧩 Install production dependencies & restart PM2
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
@@ -53,7 +66,9 @@ jobs:
           port: 22007
           script: |
             cd /var/www/portfolio/server
-            npm ci
-            npm install astro
-            npm install send server-destroy
+            echo "📦 Installation des dépendances de production..."
+            npm ci --omit=dev
+            npm install astro send server-destroy
+            echo "🚀 (Re)démarrage du service PM2..."
             PORT=8092 pm2 restart portfolio || PORT=8092 pm2 start entry.mjs --name portfolio
+            echo "✅ Déploiement terminé avec succès."
