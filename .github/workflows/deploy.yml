@@ -32,7 +32,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22007
           source: "dist/*"
           target: "/var/www/portfolio/"
           strip_components: 1
@@ -46,7 +45,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22007
           script: |
             cd /var/www/portfolio/server
             npm ci
