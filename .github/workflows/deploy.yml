@@ -18,29 +18,43 @@ jobs:
           node-version: "18"
           cache: "npm"
 
+      # 1️⃣ Installation complète avant build
       - name: Install dependencies
         run: |
           npm install
           npm ci
 
+      # 2️⃣ Build du projet Astro
       - name: Build project
         run: |
           npm run build
           cp package.json dist/server/
 
-      # ✅ Envoie les dossiers client ET server
-      - name: Deploy to VPS via SCP
+      # 3️⃣ Nettoyage complet du dossier distant
+      - name: Clean remote directory before deploy
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo rm -rf /var/www/portfolio
+            mkdir -p /var/www/portfolio
+
+      # 4️⃣ Déploiement du build complet (client + server)
+      - name: Deploy build to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/client,dist/server"
+          source: "dist/"
           target: "/var/www/portfolio/"
-          rm: true
+          rm: false
           overwrite: true
           debug: true
 
+      # 5️⃣ Installation prod et relance PM2
       - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
