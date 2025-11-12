@@ -38,12 +38,12 @@ jobs:
           port: 22007
           script: |
             echo "🧹 Suppression des anciens dossiers client et server..."
-            sudo rm -rf /var/www/portfolio/client
-            sudo rm -rf /var/www/portfolio/server
+            rm -rf /var/www/portfolio/client
+            rm -rf /var/www/portfolio/server
             echo "📁 Vérification / création du dossier portfolio..."
-            sudo mkdir -p /var/www/portfolio
-            sudo chown -R etudiant:www-data /var/www/portfolio
-            sudo chmod -R 755 /var/www/portfolio
+            mkdir -p /var/www/portfolio
+            chown -R etudiant:www-data /var/www/portfolio
+            chmod -R 755 /var/www/portfolio
             echo "✅ Le dossier portfolio est prêt à recevoir la nouvelle version."
 
       - name: 🚀 Deploy build to VPS via SCP
