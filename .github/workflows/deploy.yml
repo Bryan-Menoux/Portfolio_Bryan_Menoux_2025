@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            sudo rm -rf /var/www/portfolio/*
+            sudo rm -rf /var/www/portfolio/
 
       - name: Deploy to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
