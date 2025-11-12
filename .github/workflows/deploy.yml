@@ -51,9 +51,9 @@ jobs:
           port: 22007
           script: |
             echo "🔐 Application des permissions..."
-            sudo mkdir -p /var/www/portfolio
-            sudo chown -R etudiant:etudiant /var/www/portfolio
-            sudo chmod -R 777 /var/www/portfolio
+            mkdir -p /var/www/portfolio
+            chown -R etudiant:etudiant /var/www/portfolio
+            chmod -R 777 /var/www/portfolio
 
             echo "📦 Installation des dépendances de production..."
             cd /var/www/portfolio/server
