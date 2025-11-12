@@ -25,6 +25,14 @@ jobs:
         run: |
           npm run build
           cp package.json dist/server/
+      - name: Clean remote directory before deploy
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            rm -rf /var/www/portfolio/*
 
       - name: Deploy to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
