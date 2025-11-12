@@ -25,7 +25,7 @@ jobs:
         run: |
           npm run build
           cp package.json dist/server/
-      - name: Deploy to VPS via SCP
+      - name: Sync client & server to VPS (with cleanup)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
@@ -33,19 +33,21 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           script: |
-            echo "🚀 Déploiement en cours (mise à jour des dossiers client et server dans /var/www/portfolio)..."
+            echo "🚀 Synchronisation du contenu GitHub → VPS (/var/www/portfolio)"
             if ! command -v rsync &> /dev/null; then
               echo "⚙️ Installation de rsync sur le VPS..."
               sudo apt update && sudo apt install -y rsync
             fi
 
-            mkdir -p /var/www/portfolio/client
-            mkdir -p /var/www/portfolio/server
+            # Synchronisation du dossier client
+            echo "📁 Synchronisation du dossier client..."
+            rsync -avz --delete /github/workspace/client/ /var/www/portfolio/client/
 
-            rsync -avz --delete --progress client/ /var/www/portfolio/client/
-            rsync -avz --delete --progress server/ /var/www/portfolio/server/
+            # Synchronisation du dossier server
+            echo "📁 Synchronisation du dossier server..."
+            rsync -avz --delete /github/workspace/server/ /var/www/portfolio/server/
 
-            echo "✅ Dossiers client et server mis à jour avec succès."
+            echo "✅ Synchronisation terminée. Tous les fichiers obsolètes ont été supprimés."
 
       - name: Install production dependencies on VPS
         uses: appleboy/ssh-action@v1.0.0
