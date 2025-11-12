@@ -35,7 +35,7 @@ jobs:
           source: "dist/*"
           target: "/var/www/portfolio/"
           strip_components: 1
-          rm: false
+          rm: true
           overwrite: true
           debug: true
 
