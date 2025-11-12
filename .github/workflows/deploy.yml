@@ -26,7 +26,8 @@ jobs:
           npm run build
           cp package.json dist/server/
 
-      - name: 📤 Deploy to VPS via SCP
+      # Étape unique : suppression + transfert
+      - name: 📤 Deploy to VPS via SCP (clean + upload)
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
@@ -36,11 +37,12 @@ jobs:
           source: "dist/**"
           target: "/var/www/portfolio"
           overwrite: true
+          rm: true # ← supprime le dossier distant avant transfert
+          strip_components: 0
           debug: true
-          rm: false # on garde le dossier, plus sûr
-          strip_components: 0 # on conserve l’arborescence dist/
 
-      - name: 🧩 Install production dependencies & restart PM2
+      # Étape post-déploiement : permissions + PM2
+      - name: 🧩 Set permissions and restart PM2
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
@@ -48,8 +50,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
           script: |
-            echo "📁 Vérification du dossier distant..."
-            mkdir -p /var/www/portfolio/server
+            echo "🔐 Application des permissions..."
+            sudo mkdir -p /var/www/portfolio
+            sudo chown -R etudiant:etudiant /var/www/portfolio
+            sudo chmod -R 777 /var/www/portfolio
 
             echo "📦 Installation des dépendances de production..."
             cd /var/www/portfolio/server
