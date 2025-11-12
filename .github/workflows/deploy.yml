@@ -37,8 +37,8 @@ jobs:
           port: 22007
           script: |
             echo "🧹 Suppression des anciens dossiers client et server..."
-            rm -rf /var/www/portfolio/client
-            rm -rf /var/www/portfolio/server
+            sudo rm -rf /var/www/portfolio/client
+            sudo rm -rf /var/www/portfolio/server
             echo "📁 Vérification / création du dossier portfolio..."
             mkdir -p /var/www/portfolio
             chown -R etudiant:www-data /var/www/portfolio
