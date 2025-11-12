@@ -34,7 +34,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22007
-          source: "dist/**"
+          source: "dist/*"
           target: "/var/www/portfolio"
           overwrite: true
           rm: true # ← supprime le dossier distant avant transfert
@@ -57,6 +57,7 @@ jobs:
 
             echo "📦 Installation des dépendances de production..."
             cd /var/www/portfolio/server
+            npm install
             npm ci --omit=dev
             npm install astro send server-destroy react react-dom
 
