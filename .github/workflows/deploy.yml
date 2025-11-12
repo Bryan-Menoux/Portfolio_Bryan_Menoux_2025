@@ -31,6 +31,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22007
           script: |
             echo "🚀 Déploiement du portfolio..."
             if ! command -v rsync &> /dev/null; then
