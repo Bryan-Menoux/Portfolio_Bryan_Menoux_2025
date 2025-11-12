@@ -20,8 +20,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          mkdir /var/www/portfolio
-          chmod 777 /var/www/portfolio/
+          sudo mkdir /var/www/portfolio
+          sudo chmod 777 /var/www/portfolio/
           npm i
           npm install react react-dom
           npm ci
