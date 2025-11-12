@@ -28,22 +28,6 @@ jobs:
           npm run build
           cp package.json dist/server/
 
-      - name: 🧹 Clean old build on VPS (client + server only)
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22007
-          script: |
-            echo "🧹 Suppression des anciens dossiers client et server..."
-            sudo rm -rf /var/www/portfolio/client
-            sudo rm -rf /var/www/portfolio/server
-            echo "📁 Vérification / création du dossier portfolio..."
-            mkdir -p /var/www/portfolio
-            chown -R etudiant:www-data /var/www/portfolio
-            chmod -R 755 /var/www/portfolio
-            echo "✅ Le dossier portfolio est prêt à recevoir la nouvelle version."
       - name: 🚀 Deploy build to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
@@ -54,6 +38,7 @@ jobs:
           source: "dist/*"
           target: "/var/www/portfolio/"
           strip_components: 1
+          rm: true
           overwrite: true
           debug: true
       - name: 🧩 Install production dependencies & restart PM2
