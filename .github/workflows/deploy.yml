@@ -28,7 +28,7 @@ jobs:
           npm run build
           cp package.json dist/server/
 
-      - name: 🚀 Deploy build to VPS via SCP
+      - name: Deploy to VPS via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
@@ -41,6 +41,7 @@ jobs:
           rm: true
           overwrite: true
           debug: true
+
       - name: 🧩 Install production dependencies & restart PM2
         uses: appleboy/ssh-action@v1.0.0
         with:
