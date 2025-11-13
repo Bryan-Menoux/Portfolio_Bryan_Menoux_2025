@@ -34,7 +34,7 @@ const formatCompetence = (competence) => ({
   description: competence.description || "",
   anneesExperience: competence.anneesExperience || 0,
   icone: competence.icone
-    ? pb.files.getUrl(competence, competence.icone)
+    ? pb.files.getURL(competence, competence.icone)
     : null,
   categorie: competence.categorie,
   created: competence.created,
