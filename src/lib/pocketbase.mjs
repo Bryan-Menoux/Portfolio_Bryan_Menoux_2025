@@ -10,7 +10,7 @@ const isLocal =
 // URL de PocketBase
 const baseUrl = isLocal
   ? "http://127.0.0.1:8090"
-  : "https://portfolio.bryan-menoux.fr:8082";
+  : "https://portfolio.bryan-menoux.fr";
 
 const pb = new PocketBase(baseUrl);
 
