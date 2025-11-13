@@ -29,6 +29,13 @@ const { title = "Portfolio Bryan Menoux" } = Astro.props;
   <body>
     <Header />
     <slot />
+
+    <script>
+      // Scroll vers le haut au chargement de la page
+      window.addEventListener("load", () => {
+        window.scrollTo(0, 0);
+      });
+    </script>
   </body>
 </html>
 
