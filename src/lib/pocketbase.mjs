@@ -22,6 +22,7 @@ export const POCKETBASE_URL = baseUrl;
 // ============================================
 
 const COLLECTION_COMPETENCES = "competences";
+const COLLECTION_PROJETS = "projets";
 
 // ============================================
 // UTILITAIRES
@@ -250,5 +251,89 @@ export async function getCompetencesPaginated(page = 1, perPage = 6) {
   } catch (err) {
     console.error("Erreur lors de la récupération paginée :", err);
     throw err;
+  }
+}
+
+// ============================================
+// FONCTIONS - PROJETS
+// ============================================
+
+const formatProjet = (projet) => ({
+  id: projet.id,
+  titre: projet.titre,
+  description: projet.description || "",
+  infoSupp: projet.infoSupp || "",
+  logo: projet.logo ? pb.files.getURL(projet, projet.logo) : null,
+  stacks: projet.stacks || [],
+  created: projet.created,
+  updated: projet.updated,
+});
+
+export async function getAllProjets() {
+  try {
+    const records = await pb.collection(COLLECTION_PROJETS).getFullList({
+      sort: "created",
+    });
+    return records.map(formatProjet);
+  } catch (err) {
+    console.error("Erreur lors de la récupération des projets :", err);
+    throw err;
+  }
+}
+
+export async function getProjetById(id) {
+  try {
+    const record = await pb.collection(COLLECTION_PROJETS).getOne(id);
+    return formatProjet(record);
+  } catch (err) {
+    console.error("Erreur lors de la récupération du projet :", err);
+    throw err;
+  }
+}
+
+export async function createProjet(data) {
+  try {
+    const record = await pb.collection(COLLECTION_PROJETS).create({
+      titre: data.titre,
+      description: data.description || "",
+      infoSupp: data.infoSupp || "",
+      logo: data.logo || null,
+      stacks: data.stacks || [],
+    });
+    return formatProjet(record);
+  } catch (err) {
+    console.error("Erreur lors de la création du projet :", err);
+    throw err;
+  }
+}
+
+export async function updateProjet(id, data) {
+  try {
+    const updateData = {};
+    if (data.titre !== undefined) updateData.titre = data.titre;
+    if (data.description !== undefined)
+      updateData.description = data.description;
+    if (data.infoSupp !== undefined) updateData.infoSupp = data.infoSupp;
+    if (data.logo !== undefined) updateData.logo = data.logo;
+    if (data.stacks !== undefined) updateData.stacks = data.stacks;
+
+    const record = await pb
+      .collection(COLLECTION_PROJETS)
+      .update(id, updateData);
+    return formatProjet(record);
+  } catch (err) {
+    console.error("Erreur lors de la modification du projet :", err);
+    throw err;
+  }
+}
+
+export async function deleteProjet(id) {
+  try {
+    await pb.collection(COLLECTION_PROJETS).delete(id);
+    console.log(`Projet ${id} supprimé avec succès`);
+    return true;
+  } catch (err) {
+    console.error("Erreur lors de la suppression du projet :", err);
+    return false;
   }
 }
