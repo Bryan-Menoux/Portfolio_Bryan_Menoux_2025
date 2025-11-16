@@ -291,10 +291,37 @@ const formatProjet = (projet) => {
     id: projet.id,
     titre: projet.nom || projet.titre || "",
     description: projet.description || "",
+    contexte: projet.contexte || "",
+    pourquoi: projet.pourquoi || "",
     infoSupp: infoSuppArray,
     logo: projet.logo ? pb.files.getURL(projet, projet.logo) : null,
+    concept_visualisation: projet.concept_visualisation
+      ? pb.files.getURL(projet, projet.concept_visualisation)
+      : null,
+    moodboard: projet.moodboard
+      ? pb.files.getURL(projet, projet.moodboard)
+      : null,
+    maquette_visualisation: projet.maquette_visualisation
+      ? pb.files.getURL(projet, projet.maquette_visualisation)
+      : null,
+    title_h1: projet.title_h1 || "",
+    title_h2: projet.title_h2 || "",
+    title_h3: projet.title_h3 || "",
+    corp: projet.corp || "",
+    description_fonts: projet.description_fonts || "",
+    palette: projet.palette || null,
+    description_palette: projet.description_palette || "",
+    description_logo: projet.description_logo || "",
+    points_cle: projet.points_cle || "",
+    accessibilite: projet.accessibilite || "",
+    responsivite: projet.responsivite || "",
+    contraintes: projet.contraintes || "",
+    approche: projet.approche || "",
+    apprentissage: projet.apprentissage || "",
+    lien: projet.lien || "",
     stacks: stackNames.length > 0 ? stackNames : projet.stacks || [],
     favori: projet.favori || false,
+    slug: projet.slug || "",
     created: projet.created,
     updated: projet.updated,
   };
@@ -333,6 +360,18 @@ export async function getProjetById(id) {
     return formatProjet(record);
   } catch (err) {
     console.error("Erreur lors de la récupération du projet :", err);
+    throw err;
+  }
+}
+
+export async function getProjetBySlug(slug) {
+  try {
+    const record = await pb
+      .collection(COLLECTION_PROJETS)
+      .getFirstListItem(`slug = "${slug}"`);
+    return formatProjet(record);
+  } catch (err) {
+    console.error("Erreur lors de la récupération du projet par slug :", err);
     throw err;
   }
 }

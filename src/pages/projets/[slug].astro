@@ -1,0 +1,416 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import HeroProjets from "../../components/HeroProjets.astro";
+import ConceptSection from "../../components/ConceptSection.astro";
+import { getProjetBySlug, getFavoriProjets } from "../../lib/pocketbase.mjs";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const projet = await getProjetBySlug(slug);
+
+if (!projet) {
+  return Astro.redirect("/");
+}
+
+// Récupère les autres projets favoris pour la section finale
+const projetsRelated = (await getFavoriProjets())
+  .filter((p) => p.slug !== slug)
+  .slice(0, 6);
+---
+
+<Layout>
+  <!-- Hero Section -->
+  <HeroProjets {projet} />
+
+  <!-- Concept Section -->
+  <ConceptSection {projet} />
+
+  <!-- Design Section -->
+  {
+    (projet.moodboard ||
+      projet.title_h1 ||
+      projet.title_h2 ||
+      projet.title_h3 ||
+      projet.description_fonts ||
+      projet.corp) && (
+      <section class="w-full py-16 md:py-24 px-4">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-3xl md:text-4xl font-bold mb-12 text-primary">
+            « LE DESIGN »
+          </h2>
+
+          {projet.moodboard && (
+            <div class="mb-12 rounded-lg overflow-hidden">
+              <img
+                src={projet.moodboard}
+                alt="Moodboard"
+                class="w-full h-auto object-cover"
+              />
+            </div>
+          )}
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {projet.title_h1 && (
+              <div class="bg-black/40 rounded-lg p-6">
+                <p class="text-gray-400 text-xs font-semibold mb-2">TITRE H1</p>
+                <p class="text-white text-2xl font-bold">{projet.title_h1}</p>
+              </div>
+            )}
+
+            {projet.title_h2 && (
+              <div class="bg-black/40 rounded-lg p-6">
+                <p class="text-gray-400 text-xs font-semibold mb-2">TITRE H2</p>
+                <p class="text-white text-xl font-bold">{projet.title_h2}</p>
+              </div>
+            )}
+
+            {projet.title_h3 && (
+              <div class="bg-black/40 rounded-lg p-6">
+                <p class="text-gray-400 text-xs font-semibold mb-2">TITRE H3</p>
+                <p class="text-white text-lg font-bold">{projet.title_h3}</p>
+              </div>
+            )}
+          </div>
+
+          {(projet.description_fonts || projet.corp) && (
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+              {projet.corp && (
+                <div>
+                  <h3 class="text-primary font-semibold mb-3">
+                    Corps de texte
+                  </h3>
+                  <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                    {projet.corp}
+                  </p>
+                </div>
+              )}
+
+              {projet.description_fonts && (
+                <div>
+                  <h3 class="text-primary font-semibold mb-3">Polices</h3>
+                  <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                    {projet.description_fonts}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Palette Section -->
+  {
+    (projet.palette || projet.description_palette) && (
+      <section class="w-full py-16 md:py-24 px-4 bg-black/40">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-3xl md:text-4xl font-bold mb-12 text-primary">
+            « PALETTE »
+          </h2>
+
+          {projet.palette && (
+            <div class="mb-12">
+              <div class="flex flex-wrap gap-4">
+                {Array.isArray(projet.palette) &&
+                  projet.palette.map((color: any) => (
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-16 h-16 md:w-20 md:h-20 rounded-lg border border-gray-600"
+                        style={`background-color: ${color.color || color}`}
+                      />
+                      {color.name && (
+                        <span class="text-gray-300 text-sm">{color.name}</span>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {projet.description_palette && (
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+              {projet.description_palette}
+            </p>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Logo Section -->
+  {
+    projet.description_logo && (
+      <section class="w-full py-16 md:py-24 px-4">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-3xl md:text-4xl font-bold mb-12 text-primary">
+            « LE LOGO »
+          </h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div class="bg-black/40 rounded-lg p-8 flex items-center justify-center h-64">
+              {projet.logo && (
+                <img
+                  src={projet.logo}
+                  alt={projet.titre}
+                  class="w-full h-full object-contain"
+                />
+              )}
+            </div>
+
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+              {projet.description_logo}
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Maquette Section -->
+  {
+    (projet.maquette_visualisation || projet.points_cle) && (
+      <section class="w-full py-16 md:py-24 px-4 bg-black/40">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-3xl md:text-4xl font-bold mb-12 text-primary">
+            « LA MAQUETTE »
+          </h2>
+
+          {projet.maquette_visualisation && (
+            <div class="mb-12 rounded-lg overflow-hidden">
+              <img
+                src={projet.maquette_visualisation}
+                alt="Maquette"
+                class="w-full h-auto object-cover"
+              />
+            </div>
+          )}
+
+          {projet.points_cle && (
+            <div>
+              <h3 class="text-primary font-semibold mb-4">
+                Points clés du design
+              </h3>
+              <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                {projet.points_cle}
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Développement Section -->
+  {
+    (projet.accessibilite ||
+      projet.responsivite ||
+      projet.approche ||
+      projet.apprentissage ||
+      projet.contraintes) && (
+      <section class="w-full py-16 md:py-24 px-4">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-3xl md:text-4xl font-bold mb-12 text-primary">
+            « LE DÉVELOPPEMENT »
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {projet.accessibilite && (
+              <div class="bg-black/40 rounded-lg p-6">
+                <div class="flex items-start gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                    <svg
+                      class="w-6 h-6 text-black"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="text-primary font-semibold">Accessibilité</h4>
+                    <p class="text-gray-300 text-sm mt-2">
+                      {projet.accessibilite}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {projet.responsivite && (
+              <div class="bg-black/40 rounded-lg p-6">
+                <div class="flex items-start gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                    <svg
+                      class="w-6 h-6 text-black"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M17 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-5-5zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="text-primary font-semibold">Responsivité</h4>
+                    <p class="text-gray-300 text-sm mt-2">
+                      {projet.responsivite}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {projet.approche && (
+              <div class="bg-black/40 rounded-lg p-6">
+                <h4 class="text-primary font-semibold mb-3">Approche</h4>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                  {projet.approche}
+                </p>
+              </div>
+            )}
+
+            {projet.contraintes && (
+              <div class="bg-black/40 rounded-lg p-6">
+                <h4 class="text-primary font-semibold mb-3">Contraintes</h4>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                  {projet.contraintes}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {projet.apprentissage && (
+            <div class="mt-8 bg-black/40 rounded-lg p-6">
+              <h4 class="text-primary font-semibold mb-3">Apprentissage</h4>
+              <p class="text-gray-300 text-sm leading-relaxed">
+                {projet.apprentissage}
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Stack Section -->
+  {
+    projet.stacks && projet.stacks.length > 0 && (
+      <section class="w-full py-16 md:py-24 px-4 bg-black/40">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-3xl md:text-4xl font-bold mb-8 text-primary">
+            « STACK UTILISÉ »
+          </h2>
+          <div class="flex flex-wrap gap-3">
+            {projet.stacks.map(
+              (stack: string) =>
+                stack &&
+                stack.trim() && (
+                  <span class="inline-block px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm rounded-full bg-primary/20 text-primary border border-primary font-medium">
+                    {stack}
+                  </span>
+                )
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Lien Section -->
+  {
+    projet.lien && (
+      <section class="w-full py-16 md:py-24 px-4">
+        <div class="container mx-auto max-w-6xl text-center">
+          <h2 class="text-3xl md:text-4xl font-bold mb-8 text-primary">
+            « LE RÉSULTAT »
+          </h2>
+          <a
+            href={projet.lien}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-black font-bold hover:bg-primary/90 transition"
+          >
+            Voir le projet
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 6H6v12h12v-6m0-6l6-6m0 0l-6 6m6-6v6h6"
+              />
+            </svg>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Projets Relatifs Section -->
+  {
+    projetsRelated.length > 0 && (
+      <section class="w-full py-16 md:py-24 px-4 bg-black/40">
+        <div class="container mx-auto max-w-6xl">
+          <h2 class="text-3xl md:text-4xl font-bold mb-12 text-primary">
+            « MES AUTRES PROJETS »
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projetsRelated.map((p) => (
+              <a
+                href={`/projets/${p.slug}`}
+                class="group bg-black/40 rounded-lg overflow-hidden hover:border-primary/50 border border-transparent transition"
+              >
+                {p.logo && (
+                  <div class="w-full h-40 bg-black/60 flex items-center justify-center overflow-hidden">
+                    <img
+                      src={p.logo}
+                      alt={p.titre}
+                      class="w-full h-full object-contain group-hover:scale-110 transition"
+                    />
+                  </div>
+                )}
+                <div class="p-4">
+                  <h3 class="text-white font-semibold group-hover:text-primary transition">
+                    {p.titre}
+                  </h3>
+                  <p class="text-gray-400 text-sm mt-2 line-clamp-2">
+                    {p.description}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Back Button -->
+  <section class="w-full py-16 px-4">
+    <div class="container mx-auto max-w-6xl">
+      <a
+        href="/#projets"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-black font-medium hover:bg-primary/90 transition"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Retour aux projets
+      </a>
+    </div>
+  </section>
+</Layout>

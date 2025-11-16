@@ -1,0 +1,143 @@
+s---
+import grilles from "../assets/grilles.webp";
+
+interface Props {
+  projet: any;
+}
+
+const { projet } = Astro.props;
+---
+
+{
+  (projet.contexte || projet.pourquoi || projet.concept_visualisation || projet.description) && (
+    <section
+      class="w-full h-fit bg-center bg-cover flex flex-col items-center py-16 md:py-24 lg:py-32 relative"
+      id="concept"
+      style={`background-image: url(${grilles.src});`}
+    >
+      <h2 class="h2 relative z-10">
+        &lt;LE <span class="text-primary">CONCEPT</span>&gt;
+      </h2>
+      <div
+        class="max-w-7xl grid gap-4 mt-8 md:mt-10 lg:mt-12 px-4 w-full min-h-[40dvh] md:min-h-[55dvh] lg:h-[70dvh] relative z-10 grid-cols-1 lg:grid-cols-3"
+      >
+        <!-- COLONNE GAUCHE - IMAGE -->
+        <div
+          class="w-full md:w-3/4 lg:w-full md:max-w-[420px] lg:max-w-none mx-auto h-[40dvh] md:h-[52dvh] lg:h-full rounded-3xl overflow-hidden relative"
+          style="background: radial-gradient(circle at center, #7665F3 0%, #7665F3 38%, #4C39D8 100%);"
+        >
+          <div class="noise"></div>
+          {
+            projet.concept_visualisation && (
+              <img
+                src={projet.concept_visualisation}
+                alt="Concept visualization"
+                loading="lazy"
+                class="w-full h-full object-cover relative z-10"
+                style="object-position: center 50%;"
+              />
+            )
+          }
+        </div>
+
+        <!-- COLONNE DROITE - 3 DIVS -->
+        <div class="w-full h-auto flex flex-col gap-4 lg:col-span-2">
+          <!-- DIV 1 - TITRE ET DESCRIPTION -->
+          {
+            (projet.titre || projet.description) && (
+              <div
+                class="w-full h-64 md:h-96 lg:h-1/2 rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px]"
+              >
+                <div
+                  class="absolute inset-0"
+                  style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.6) 0%, rgba(53, 63, 82, 0.6) 38%, rgba(45, 54, 71, 0.6) 100%);"
+                >
+                </div>
+                <div class="noise absolute inset-0"></div>
+                <div
+                  class="absolute inset-0 pointer-events-none bg-linear-to-t from-black/60 to-transparent"
+                >
+                </div>
+                <div
+                  class="relative z-20 w-full h-full p-6 md:p-8 flex flex-col justify-between"
+                >
+                  <div
+                    class="flex flex-col md:flex-row gap-4 justify-between md:items-center"
+                  >
+                    {projet.titre && (
+                      <h2 class="h3 text-base md:text-lg lg:text-xl">{projet.titre}</h2>
+                    )}
+                  </div>
+                  {projet.description && (
+                    <p class="max-w-[90%] md:max-w-[85%] text-sm md:text-base lg:text-lg">
+                      {projet.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )
+          }
+
+          <!-- DIV 2 ET 3 - GRILLE CONTEXTE ET POURQUOI -->
+          <div
+            class="w-full h-fit md:h-96 lg:h-1/2 flex flex-col md:flex-row gap-4"
+          >
+            <!-- DIV 2 - CONTEXTE -->
+            {
+              projet.contexte && (
+                <div
+                  class="w-full h-fit md:h-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col justify-between p-6 md:p-8 transition-all duration-300"
+                  style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.6) 0%, rgba(53, 63, 82, 0.6) 38%, rgba(45, 54, 71, 0.6) 100%);"
+                >
+                  <div class="noise absolute inset-0"></div>
+                  <div
+                    class="absolute inset-0 pointer-events-none bg-linear-to-t from-black/60 to-transparent"
+                  >
+                  </div>
+                  <div
+                    class="flex flex-col md:flex-row gap-4 justify-between md:items-center md:flex-wrap w-full relative z-20"
+                  >
+                    <h2 class="h3 text-base md:text-lg lg:text-xl transition-all duration-300">
+                      Contexte
+                    </h2>
+                  </div>
+                  <p
+                    class="max-w-[90%] md:max-w-[85%] text-sm md:text-base lg:text-lg relative z-20"
+                  >
+                    {projet.contexte}
+                  </p>
+                </div>
+              )
+            }
+
+            <!-- DIV 3 - POURQUOI -->
+            {
+              projet.pourquoi && (
+                <div
+                  class="w-full h-fit md:h-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col justify-between p-6 md:p-8 transition-all duration-300"
+                  style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.6) 0%, rgba(53, 63, 82, 0.6) 38%, rgba(45, 54, 71, 0.6) 100%);"
+                >
+                  <div class="noise absolute inset-0"></div>
+                  <div
+                    class="absolute inset-0 pointer-events-none bg-linear-to-t from-black/60 to-transparent"
+                  >
+                  </div>
+                  <div
+                    class="flex flex-col md:flex-row gap-4 justify-between md:items-center md:flex-wrap w-full relative z-20"
+                  >
+                    <h2 class="h3 text-base md:text-lg lg:text-xl">Pourquoi ?</h2>
+                  </div>
+                  <p
+                    class="max-w-[90%] md:max-w-[85%] text-sm md:text-base lg:text-lg relative z-20"
+                  >
+                    {projet.pourquoi}
+                  </p>
+                </div>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
