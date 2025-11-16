@@ -1,11 +1,10 @@
 import PocketBase from "pocketbase";
 
-// Détection de l'environnement
+// Détection de l'environnement (client uniquement)
 const isLocal =
-  typeof window !== "undefined"
-    ? window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1"
-    : process.env.NODE_ENV !== "production";
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
 
 // URL de PocketBase
 const baseUrl = isLocal
