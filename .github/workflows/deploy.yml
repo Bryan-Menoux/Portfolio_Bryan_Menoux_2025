@@ -56,7 +56,6 @@ jobs:
           script: |
             cd /var/www/portfolio/server
             npm install
-            npm ci
-            npm install astro react react-dom pm2
+            npm install astro react react-dom pm2 node
             npm install send server-destroy
             PORT=8081 pm2 restart portfolio || PORT=8081 pm2 start entry.mjs --name portfolio
