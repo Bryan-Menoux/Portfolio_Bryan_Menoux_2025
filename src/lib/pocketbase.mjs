@@ -258,25 +258,71 @@ export async function getCompetencesPaginated(page = 1, perPage = 6) {
 // FONCTIONS - PROJETS
 // ============================================
 
-const formatProjet = (projet) => ({
-  id: projet.id,
-  titre: projet.titre,
-  description: projet.description || "",
-  infoSupp: projet.infoSupp || "",
-  logo: projet.logo ? pb.files.getURL(projet, projet.logo) : null,
-  stacks: projet.stacks || [],
-  created: projet.created,
-  updated: projet.updated,
-});
+const formatProjet = (projet) => {
+  // Récupère les noms des compétences si la relation expand est disponible
+  let stackNames = [];
+  if (
+    projet.expand &&
+    projet.expand.stack &&
+    Array.isArray(projet.expand.stack)
+  ) {
+    stackNames = projet.expand.stack.map((comp) => comp.nom);
+  }
+
+  // Récupère les infos supplémentaires si la relation expand est disponible
+  let infoSuppArray = [];
+  if (
+    projet.expand &&
+    projet.expand.infoSupp &&
+    Array.isArray(projet.expand.infoSupp)
+  ) {
+    infoSuppArray = projet.expand.infoSupp.map(
+      (info) => info.title || info.nom || info.name || ""
+    );
+  } else if (projet.infoSupp && Array.isArray(projet.infoSupp)) {
+    // Fallback si expand n'est pas disponible et infoSupp est un array
+    infoSuppArray = projet.infoSupp;
+  } else if (typeof projet.infoSupp === "string") {
+    // Fallback si c'est une string
+    infoSuppArray = [projet.infoSupp];
+  }
+
+  return {
+    id: projet.id,
+    titre: projet.nom || projet.titre || "",
+    description: projet.description || "",
+    infoSupp: infoSuppArray,
+    logo: projet.logo ? pb.files.getURL(projet, projet.logo) : null,
+    stacks: stackNames.length > 0 ? stackNames : projet.stacks || [],
+    favori: projet.favori || false,
+    created: projet.created,
+    updated: projet.updated,
+  };
+};
 
 export async function getAllProjets() {
   try {
     const records = await pb.collection(COLLECTION_PROJETS).getFullList({
       sort: "created",
+      expand: "stack,infoSupp",
     });
     return records.map(formatProjet);
   } catch (err) {
     console.error("Erreur lors de la récupération des projets :", err);
+    throw err;
+  }
+}
+
+export async function getFavoriProjets() {
+  try {
+    const records = await pb.collection(COLLECTION_PROJETS).getFullList({
+      filter: "favori = true",
+      sort: "created",
+      expand: "stack,infoSupp",
+    });
+    return records.map(formatProjet);
+  } catch (err) {
+    console.error("Erreur lors de la récupération des projets favoris :", err);
     throw err;
   }
 }

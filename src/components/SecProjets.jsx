@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 let gsap = null;
 let ScrollTrigger = null;
 
-export default function SecProjets({ projects = [], gridBackground }) {
+export default function SecProjets({ projects, gridBackground }) {
   const container = useRef(null);
   const track = useRef(null);
 
@@ -66,7 +66,7 @@ function ProjectCard({ project }) {
   return (
     <div className="min-w-[50vw] px-[5vw] flex items-stretch justify-center shrink-0 h-full">
       <div
-        className="w-full max-w-5xl rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] px-16 py-12 flex flex-col"
+        className="w-full max-w-5xl rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] px-8 pr-16 py-12 flex flex-col"
         style={{
           background:
             "radial-gradient(circle at center, rgba(25, 32, 45, 0.95) 0%, rgba(25, 32, 45, 0.95) 38%, rgba(15, 20, 30, 0.95) 100%)",
@@ -78,11 +78,11 @@ function ProjectCard({ project }) {
         <div className="relative z-20 w-full flex gap-10 justify-between items-stretch h-full">
           <div className="flex items-center justify-center shrink-0">
             {project.logo && (
-              <div className="w-[40dvh] h-[40dvh] rounded-2xl overflow-hidden flex items-center justify-center backdrop-blur-sm border border-white/10 shrink-0">
+              <div className="w-[40dvh] h-[40dvh] rounded-2xl overflow-hidden flex items-center justify-center backdrop-blur-sm shrink-0">
                 <img
                   src={project.logo}
                   alt={project.titre}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain object-center"
                 />
               </div>
             )}
@@ -91,11 +91,27 @@ function ProjectCard({ project }) {
           <div className="flex flex-col justify-between h-full flex-1">
             <div>
               <h3 className="h3">{project.titre}</h3>
-              {project.infoSupp && (
-                <span className="inline-block px-6 py-2 text-xs rounded-full bg-primary text-white font-medium whitespace-nowrap mt-3">
-                  {project.infoSupp}
-                </span>
-              )}
+              {project.infoSupp &&
+                (Array.isArray(project.infoSupp)
+                  ? project.infoSupp.length > 0
+                  : true) && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {Array.isArray(project.infoSupp) ? (
+                      project.infoSupp.map((info, index) => (
+                        <span
+                          key={index}
+                          className="inline-block px-6 py-2 text-xs rounded-full bg-primary text-white font-medium whitespace-nowrap"
+                        >
+                          {info}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="inline-block px-6 py-2 text-xs rounded-full bg-primary text-white font-medium whitespace-nowrap">
+                        {project.infoSupp}
+                      </span>
+                    )}
+                  </div>
+                )}
             </div>
 
             <div>

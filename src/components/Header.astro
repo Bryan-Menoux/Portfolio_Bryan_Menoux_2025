@@ -1,12 +1,16 @@
 ---
 import logo from "../assets/logo.svg?raw";
+import hamburger from "../assets/hamburger.svg?raw";
+import croix from "../assets/croix.svg?raw";
 ---
 
 <header
-  class="fixed left-1/2 top-[2dvw] -translate-x-1/2 z-50 w-[75%] flex items-center rounded-full backdrop-blur border border-white/10 bg-black shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)]"
+  class="fixed left-1/2 top-2 md:top-3 lg:top-[2dvw] -translate-x-1/2 z-50 w-[95%] md:w-[90%] lg:w-[75%] flex items-center rounded-full lg:rounded-full backdrop-blur border border-white/10 bg-black shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)]"
   style="background: linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.4), rgba(0,0,0,0.35)), linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.6) 100%); backdrop-filter: blur(8px) url(#disp-filter);"
 >
-  <div class="w-full flex items-center justify-between gap-8 p-[0.5dvw] pl-3">
+  <div
+    class="w-full flex items-center justify-between gap-4 md:gap-8 p-0 md:p-0 lg:p-[0.5dvw] lg:pl-3 px-4 md:px-8 py-2 md:py-4"
+  >
     <a
       href="#accueil"
       class="shrink-0 hover:opacity-80 transition-opacity h-full flex items-center [&_svg]:w-full [&_svg]:h-full [&_svg]:max-w-10 [&_svg]:max-h-10"
@@ -14,7 +18,8 @@ import logo from "../assets/logo.svg?raw";
       <Fragment set:html={logo} />
     </a>
 
-    <nav class="flex gap-8 flex-1 justify-center">
+    <!-- Navigation Desktop -->
+    <nav class="hidden lg:flex gap-8 flex-1 justify-center">
       <a
         href="#accueil"
         class="text-[#FBFBFB] text-sm font-medium transition-colors relative group"
@@ -55,9 +60,126 @@ import logo from "../assets/logo.svg?raw";
 
     <a
       href="#contact"
-      class="shrink-0 bg-primary hover:bg-violet-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition-colors"
+      class="hidden lg:block shrink-0 bg-primary hover:bg-violet-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition-colors"
     >
       Contact
     </a>
+
+    <!-- Menu Hamburger Mobile/Tablet -->
+    <button
+      id="menu-toggle"
+      class="lg:hidden shrink-0 flex items-center justify-center w-6 h-6 transition-all duration-300"
+      aria-label="Toggle menu"
+    >
+      <div
+        id="hamburger-icon"
+        class="absolute transition-all duration-300 opacity-100 [&_svg]:w-6 [&_svg]:h-6"
+      >
+        <Fragment set:html={hamburger} />
+      </div>
+      <div
+        id="croix-icon"
+        class="absolute transition-all duration-300 opacity-0 rotate-90 [&_svg]:w-6 [&_svg]:h-6"
+      >
+        <Fragment set:html={croix} />
+      </div>
+    </button>
   </div>
 </header>
+
+<!-- Mobile Menu -->
+<div
+  id="mobile-menu"
+  class="hidden fixed inset-0 z-40 bg-black/95 backdrop-blur-sm lg:hidden"
+>
+  <nav
+    class="flex flex-col items-start justify-center h-full gap-8 px-16 md:px-32"
+  >
+    <a
+      href="#accueil"
+      class="menu-link text-[#FBFBFB] text-2xl font-medium transition-colors relative group"
+    >
+      Accueil
+      <span
+        class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"
+      ></span>
+    </a>
+    <a
+      href="#a-propos"
+      class="menu-link text-[#FBFBFB] text-2xl font-medium transition-colors relative group"
+    >
+      À Propos
+      <span
+        class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"
+      ></span>
+    </a>
+    <a
+      href="#competences"
+      class="menu-link text-[#FBFBFB] text-2xl font-medium transition-colors relative group"
+    >
+      Compétences
+      <span
+        class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"
+      ></span>
+    </a>
+    <a
+      href="#projets"
+      class="menu-link text-[#FBFBFB] text-2xl font-medium transition-colors relative group"
+    >
+      Projets
+      <span
+        class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"
+      ></span>
+    </a>
+    <a
+      href="#contact"
+      class="menu-link bg-primary hover:bg-violet-700 text-white px-6 py-1 md:py-2 rounded-full text-lg font-semibold transition-colors mt-8 md:mt-16 min-w-full flex justify-center items-center"
+    >
+      Contact
+    </a>
+  </nav>
+</div>
+
+<style>
+  /* Hamburger icon animation */
+  #menu-toggle.active #hamburger-icon {
+    opacity: 0;
+    rotate: 90deg;
+  }
+
+  #menu-toggle.active #croix-icon {
+    opacity: 1;
+    rotate: 0deg;
+  }
+</style>
+
+<script>
+  const menuToggle = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const menuLinks = document.querySelectorAll(".menu-link");
+
+  function closeMenu() {
+    menuToggle?.classList.remove("active");
+    mobileMenu?.classList.add("hidden");
+    document.documentElement.style.overflow = "auto";
+  }
+
+  function openMenu() {
+    menuToggle?.classList.add("active");
+    mobileMenu?.classList.remove("hidden");
+    document.documentElement.style.overflow = "hidden";
+  }
+
+  menuToggle?.addEventListener("click", () => {
+    if (menuToggle.classList.contains("active")) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  // Close menu when a link is clicked
+  menuLinks.forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+</script>
