@@ -118,11 +118,8 @@ const projetsRelated = (await getFavoriProjets())
                     <div class="flex items-center gap-3">
                       <div
                         class="w-16 h-16 md:w-20 md:h-20 rounded-lg border border-gray-600"
-                        style={`background-color: ${color.color || color}`}
+                        style={`background-color: ${color.hex || color} !important;`}
                       />
-                      {color.name && (
-                        <span class="text-gray-300 text-sm">{color.name}</span>
-                      )}
                     </div>
                   ))}
               </div>
