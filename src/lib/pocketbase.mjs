@@ -12,7 +12,7 @@ const baseUrl = envUrl
   ? envUrl
   : isDevNode
   ? "http://127.0.0.1:8090"
-  : "https://portfolio.bryan-menoux.fr";
+  : "https://portfolio.bryan-menoux.fr:8082";
 
 const pb = new PocketBase(baseUrl);
 
