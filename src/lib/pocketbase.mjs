@@ -1,31 +1,37 @@
 import PocketBase from "pocketbase";
 
-// ============================================
-// CONFIGURATION POCKETBASE
-// ============================================
+// =============================================================
+// CONFIGURATION DES URL POCKETBASE
+// =============================================================
 
 // 1. Priorité absolue : variable d'environnement
 const envUrl = process.env.POCKETBASE_URL;
 
-// 2. URL par défaut en production (VPS)
-const PROD_URL = "http://127.0.0.1:8082"; // PocketBase tourne sur ce port
+// 2. URL publique (utilisée par le navigateur)
+// IMPORTANT : le navigateur NE PEUT PAS appeler 127.0.0.1 du serveur
+const PUBLIC_URL = "https://pb-portfolio.bryan-menoux.fr";
 
-// 3. URL en développement local
+// 3. URL interne (communication serveur → PocketBase)
+const INTERNAL_URL = "http://127.0.0.1:8082";
+
+// 4. URL en développement local
 const DEV_URL = "http://127.0.0.1:8090";
 
-// Détection d'exécution côté Node
-const isNode = typeof process !== "undefined" && process?.versions?.node;
+// Contexte
+const isBrowser = typeof window !== "undefined";
+const isNode = typeof process !== "undefined" && process.versions?.node;
 
-// IMPORTANT : On considère que sur PM2 on est en production
-const isDev = isNode && process.env.LOCAL_DEV === "true";
+// Sélection finale de l’URL
+const baseUrl = envUrl
+  ? envUrl
+  : isBrowser
+  ? PUBLIC_URL
+  : process.env.LOCAL_DEV === "true"
+  ? DEV_URL
+  : INTERNAL_URL;
 
-// Sélection finale
-const baseUrl = envUrl ? envUrl : isDev ? DEV_URL : PROD_URL;
-
-// Initialisation PocketBase
-const pb = new PocketBase(baseUrl);
-
-export default pb;
+// Instanciation PocketBase
+export const pb = new PocketBase(baseUrl);
 export const POCKETBASE_URL = baseUrl;
 
 // Helper fichiers
@@ -34,16 +40,16 @@ export const getFileUrl = (collectionId, recordId, filename) => {
   return `${baseUrl}/api/files/${collectionId}/${recordId}/${filename}`;
 };
 
-// ============================================
+// =============================================================
 // CONSTANTES
-// ============================================
+// =============================================================
 
 const COLLECTION_COMPETENCES = "competences";
 const COLLECTION_PROJETS = "projets";
 
-// ============================================
-// UTILITAIRES
-// ============================================
+// =============================================================
+// FORMATAGE - COMPÉTENCES
+// =============================================================
 
 const formatCompetence = (competence) => ({
   id: competence.id,
@@ -52,14 +58,16 @@ const formatCompetence = (competence) => ({
   description: competence.description || "",
   anneesExperience: competence.anneesExperience || 0,
   icone: competence.icone
-    ? pb.files.getURL(competence, competence.icone)
+    ? pb.files.getUrl(competence, competence.icone)
     : null,
   categorie: competence.categorie,
   created: competence.created,
   updated: competence.updated,
-}); // ============================================
-// FONCTIONS - COMPETENCES
-// ============================================
+});
+
+// =============================================================
+// FONCTIONS - COMPÉTENCES
+// =============================================================
 
 export async function getAllCompetences() {
   try {
@@ -81,9 +89,7 @@ export async function getCompetencesByCategory() {
 
     const grouped = {};
     records.forEach((comp) => {
-      if (!grouped[comp.categorie]) {
-        grouped[comp.categorie] = [];
-      }
+      if (!grouped[comp.categorie]) grouped[comp.categorie] = [];
       grouped[comp.categorie].push(formatCompetence(comp));
     });
 
@@ -154,6 +160,7 @@ export async function updateCompetence(id, data) {
     const record = await pb
       .collection(COLLECTION_COMPETENCES)
       .update(id, updateData);
+
     return formatCompetence(record);
   } catch (err) {
     console.error("Erreur lors de la modification de la compétence :", err);
@@ -164,7 +171,6 @@ export async function updateCompetence(id, data) {
 export async function deleteCompetence(id) {
   try {
     await pb.collection(COLLECTION_COMPETENCES).delete(id);
-    console.log(`Compétence ${id} supprimée avec succès`);
     return true;
   } catch (err) {
     console.error("Erreur lors de la suppression de la compétence :", err);
@@ -180,6 +186,7 @@ export async function uploadCompetenceIcon(competenceId, file) {
     const record = await pb
       .collection(COLLECTION_COMPETENCES)
       .update(competenceId, formData);
+
     return formatCompetence(record);
   } catch (err) {
     console.error("Erreur lors du téléchargement de l'icône :", err);
@@ -192,6 +199,7 @@ export async function deleteCompetenceIcon(competenceId) {
     const record = await pb
       .collection(COLLECTION_COMPETENCES)
       .update(competenceId, { icone: null });
+
     return formatCompetence(record);
   } catch (err) {
     console.error("Erreur lors de la suppression de l'icône :", err);
@@ -215,8 +223,7 @@ export async function searchCompetences(searchTerm) {
 export async function getCompetenceCategories() {
   try {
     const records = await pb.collection(COLLECTION_COMPETENCES).getFullList();
-    const categories = [...new Set(records.map((c) => c.categorie))];
-    return categories;
+    return [...new Set(records.map((c) => c.categorie))];
   } catch (err) {
     console.error("Erreur lors de la récupération des catégories :", err);
     return [];
@@ -234,12 +241,12 @@ export async function getCompetencesStats() {
     };
 
     let totalLevel = 0;
+
     records.forEach((comp) => {
-      if (!stats.byCategory[comp.categorie]) {
+      if (!stats.byCategory[comp.categorie])
         stats.byCategory[comp.categorie] = 0;
-      }
       stats.byCategory[comp.categorie]++;
-      totalLevel += comp.niveau;
+      totalLevel += comp.level || 0;
     });
 
     stats.averageLevel =
@@ -256,7 +263,7 @@ export async function getCompetencesPaginated(page = 1, perPage = 6) {
   try {
     const records = await pb
       .collection(COLLECTION_COMPETENCES)
-      .getPage(page, perPage, { sort: "categorie,nom" });
+      .getList(page, perPage, { sort: "categorie,nom" });
 
     return {
       page: records.page,
@@ -271,37 +278,31 @@ export async function getCompetencesPaginated(page = 1, perPage = 6) {
   }
 }
 
-// ============================================
-// FONCTIONS - PROJETS
-// ============================================
+// =============================================================
+// FORMATAGE - PROJETS
+// =============================================================
 
 const formatProjet = (projet) => {
+  const file = (name) =>
+    name
+      ? `${POCKETBASE_URL}/api/files/${projet.collectionId}/${projet.id}/${name}`
+      : null;
+
   let stackNames = [];
-  if (
-    projet.expand &&
-    projet.expand.stack &&
-    Array.isArray(projet.expand.stack)
-  ) {
+  if (projet.expand?.stack) {
     stackNames = projet.expand.stack.map((comp) => comp.nom);
   }
+
   let infoSuppArray = [];
-  if (
-    projet.expand &&
-    projet.expand.infoSupp &&
-    Array.isArray(projet.expand.infoSupp)
-  ) {
+  if (projet.expand?.infoSupp) {
     infoSuppArray = projet.expand.infoSupp.map(
       (info) => info.title || info.nom || info.name || ""
     );
-  } else if (projet.infoSupp && Array.isArray(projet.infoSupp)) {
+  } else if (Array.isArray(projet.infoSupp)) {
     infoSuppArray = projet.infoSupp;
   } else if (typeof projet.infoSupp === "string") {
     infoSuppArray = [projet.infoSupp];
   }
-  const getFileUrl = (filename) => {
-    if (!filename) return null;
-    return `${pb.baseUrl}/api/files/${projet.collectionId}/${projet.id}/${filename}`;
-  };
 
   return {
     id: projet.id,
@@ -311,10 +312,10 @@ const formatProjet = (projet) => {
     contexte: projet.contexte || "",
     pourquoi: projet.pourquoi || "",
     infoSupp: infoSuppArray,
-    logo: getFileUrl(projet.logo),
-    concept_visualisation: getFileUrl(projet.concept_visualisation),
-    moodboard: getFileUrl(projet.moodboard),
-    maquette_visualisation: getFileUrl(projet.maquette_visualisation),
+    logo: file(projet.logo),
+    concept_visualisation: file(projet.concept_visualisation),
+    moodboard: file(projet.moodboard),
+    maquette_visualisation: file(projet.maquette_visualisation),
     title_h1: projet.title_h1 || "",
     title_h2: projet.title_h2 || "",
     title_h3: projet.title_h3 || "",
@@ -323,12 +324,9 @@ const formatProjet = (projet) => {
     palette: projet.palette || null,
     description_palette: projet.description_palette || "",
     description_logo: projet.description_logo || "",
-    recherche_logos:
-      projet.recherche_logos && Array.isArray(projet.recherche_logos)
-        ? projet.recherche_logos.map((filename) =>
-            pb.files.getURL(projet, filename)
-          )
-        : projet.recherche_logos,
+    recherche_logos: Array.isArray(projet.recherche_logos)
+      ? projet.recherche_logos.map((f) => pb.files.getUrl(projet, f))
+      : projet.recherche_logos,
     points_cle: projet.points_cle || "",
     accessibilite: projet.accessibilite || "",
     responsivite: projet.responsivite || "",
@@ -336,13 +334,17 @@ const formatProjet = (projet) => {
     approche: projet.approche || "",
     apprentissage: projet.apprentissage || "",
     lien: projet.lien || "",
-    stacks: stackNames.length > 0 ? stackNames : projet.stacks || [],
+    stacks: stackNames.length ? stackNames : projet.stacks || [],
     favori: projet.favori || false,
     slug: projet.slug || "",
     created: projet.created,
     updated: projet.updated,
   };
 };
+
+// =============================================================
+// FONCTIONS - PROJETS
+// =============================================================
 
 export async function getAllProjets() {
   try {
@@ -426,6 +428,7 @@ export async function updateProjet(id, data) {
     const record = await pb
       .collection(COLLECTION_PROJETS)
       .update(id, updateData);
+
     return formatProjet(record);
   } catch (err) {
     console.error("Erreur lors de la modification du projet :", err);
@@ -436,7 +439,6 @@ export async function updateProjet(id, data) {
 export async function deleteProjet(id) {
   try {
     await pb.collection(COLLECTION_PROJETS).delete(id);
-    console.log(`Projet ${id} supprimé avec succès`);
     return true;
   } catch (err) {
     console.error("Erreur lors de la suppression du projet :", err);
