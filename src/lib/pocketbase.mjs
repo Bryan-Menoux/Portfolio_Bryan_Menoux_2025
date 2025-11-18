@@ -1,36 +1,45 @@
 import PocketBase from "pocketbase";
 
-// Determine PocketBase URL. Priority:
-// 1. POCKETBASE_URL env var
-// 2. If running in Node dev (NODE_ENV !== 'production'), use localhost
-// 3. Otherwise use production URL
-const getBaseUrl = () => {
-  if (typeof process !== "undefined" && process?.env) {
-    const envUrl = process.env.POCKETBASE_URL;
-    const isNode = typeof process !== "undefined" && process?.versions?.node;
-    const isDevNode = isNode && process.env.NODE_ENV !== "production";
+// =============================================================
+// CONFIGURATION DES URL POCKETBASE
+// =============================================================
 
-    return envUrl
-      ? envUrl
-      : isDevNode
-      ? "http://127.0.0.1:8090"
-      : "https://portfolio.bryan-menoux.fr";
-  }
-  // Client-side default
-  return "https://portfolio.bryan-menoux.fr";
-};
+// Détection navigateur
+const isBrowser = typeof window !== "undefined";
 
-const baseUrl = getBaseUrl();
-const pb = new PocketBase(baseUrl);
+// URL publique (toujours pour les fichiers PocketBase)
+// Note: Utilise le chemin /pocketbase si configuré via reverse proxy, sinon ajuste selon ta config
+const PUBLIC_PB_URL = "https://portfolio.bryan-menoux.fr";
 
-export default pb;
-export const POCKETBASE_URL = baseUrl;
+// URL interne (SSR Astro / PM2) - Accès direct depuis le serveur
+// À adapter selon ta config: peut être http://pocketbase:8090 en Docker, ou http://127.0.0.1:8082, etc.
+const INTERNAL_URL = "http://127.0.0.1:8082";
 
-// Fonction helper pour générer les URLs des fichiers
-export const getFileUrl = (collectionId, recordId, filename, isDev = false) => {
+// URL dev locale
+const DEV_URL = "http://127.0.0.1:8090";
+
+// Variables d'environnement (uniquement côté serveur)
+const envUrl =
+  typeof process !== "undefined" && process.env?.POCKETBASE_URL
+    ? process.env.POCKETBASE_URL
+    : null;
+
+const isDevMode =
+  typeof process !== "undefined" &&
+  (process.env?.NODE_ENV === "development" ||
+    process.env?.ASTRO_BUILDTIME === "false");
+
+// URL utilisée pour APPELER PocketBase
+const baseUrl = isBrowser
+  ? PUBLIC_PB_URL // Navigateur → toujours URL publique HTTPS
+  : envUrl || (isDevMode ? DEV_URL : INTERNAL_URL);
+
+export const pb = new PocketBase(baseUrl);
+
+// URL utilisée pour les FICHIERS PocketBase (jamais 127.0.0.1 !)
+export const getFileUrl = (collectionId, recordId, filename) => {
   if (!filename) return null;
-  const url = "https://portfolio.bryan-menoux.fr";
-  return `${url}/api/files/${collectionId}/${recordId}/${filename}`;
+  return `${PUBLIC_PB_URL}/api/files/${collectionId}/${recordId}/${filename}`;
 };
 
 // ============================================
@@ -51,7 +60,7 @@ const formatCompetence = (competence) => ({
   description: competence.description || "",
   anneesExperience: competence.anneesExperience || 0,
   icone: competence.icone
-    ? pb.files.getURL(competence, competence.icone)
+    ? getFileUrl(COLLECTION_COMPETENCES, competence.id, competence.icone)
     : null,
   categorie: competence.categorie,
   created: competence.created,
@@ -297,10 +306,6 @@ const formatProjet = (projet) => {
   } else if (typeof projet.infoSupp === "string") {
     infoSuppArray = [projet.infoSupp];
   }
-  const getFileUrl = (filename) => {
-    if (!filename) return null;
-    return `${pb.baseUrl}/api/files/${projet.collectionId}/${projet.id}/${filename}`;
-  };
 
   return {
     id: projet.id,
@@ -310,10 +315,18 @@ const formatProjet = (projet) => {
     contexte: projet.contexte || "",
     pourquoi: projet.pourquoi || "",
     infoSupp: infoSuppArray,
-    logo: getFileUrl(projet.logo),
-    concept_visualisation: getFileUrl(projet.concept_visualisation),
-    moodboard: getFileUrl(projet.moodboard),
-    maquette_visualisation: getFileUrl(projet.maquette_visualisation),
+    logo: getFileUrl(COLLECTION_PROJETS, projet.id, projet.logo),
+    concept_visualisation: getFileUrl(
+      COLLECTION_PROJETS,
+      projet.id,
+      projet.concept_visualisation
+    ),
+    moodboard: getFileUrl(COLLECTION_PROJETS, projet.id, projet.moodboard),
+    maquette_visualisation: getFileUrl(
+      COLLECTION_PROJETS,
+      projet.id,
+      projet.maquette_visualisation
+    ),
     title_h1: projet.title_h1 || "",
     title_h2: projet.title_h2 || "",
     title_h3: projet.title_h3 || "",
@@ -325,7 +338,7 @@ const formatProjet = (projet) => {
     recherche_logos:
       projet.recherche_logos && Array.isArray(projet.recherche_logos)
         ? projet.recherche_logos.map((filename) =>
-            pb.files.getURL(projet, filename)
+            getFileUrl(COLLECTION_PROJETS, projet.id, filename)
           )
         : projet.recherche_logos,
     points_cle: projet.points_cle || "",
