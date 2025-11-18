@@ -1,37 +1,31 @@
 import PocketBase from "pocketbase";
 
-// ============================================
-// CONFIGURATION POCKETBASE
-// ============================================
-
-// 1. Priorité absolue : variable d'environnement
+// Determine PocketBase URL. Priority:
+// 1. POCKETBASE_URL env var
+// 2. If running in Node dev (NODE_ENV !== 'production'), use localhost
+// 3. Otherwise use production URL
 const envUrl = process.env.POCKETBASE_URL;
-
-// 2. URL par défaut en production (VPS)
-const PROD_URL = "http://127.0.0.1:8082"; // PocketBase tourne sur ce port
-
-// 3. URL en développement local
-const DEV_URL = "http://127.0.0.1:8090";
-
-// Détection d'exécution côté Node
 const isNode = typeof process !== "undefined" && process?.versions?.node;
+const isDevNode = isNode && process.env.NODE_ENV !== "production";
 
-// IMPORTANT : On considère que sur PM2 on est en production
-const isDev = isNode && process.env.LOCAL_DEV === "true";
+const baseUrl = envUrl
+  ? envUrl
+  : isDevNode
+  ? "http://127.0.0.1:8090"
+  : "https://portfolio.bryan-menoux.fr";
 
-// Sélection finale
-const baseUrl = envUrl ? envUrl : isDev ? DEV_URL : PROD_URL;
-
-// Initialisation PocketBase
 const pb = new PocketBase(baseUrl);
 
 export default pb;
 export const POCKETBASE_URL = baseUrl;
 
-// Helper fichiers
-export const getFileUrl = (collectionId, recordId, filename) => {
+// Fonction helper pour générer les URLs des fichiers
+export const getFileUrl = (collectionId, recordId, filename, isDev = false) => {
   if (!filename) return null;
-  return `${baseUrl}/api/files/${collectionId}/${recordId}/${filename}`;
+  const url = isDev
+    ? "http://127.0.0.1:8090"
+    : "https://portfolio.bryan-menoux.fr";
+  return `${url}/api/files/${collectionId}/${recordId}/${filename}`;
 };
 
 // ============================================
