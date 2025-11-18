@@ -3,15 +3,20 @@ import PocketBase from "pocketbase";
 // =============================================================
 // CONFIGURATION DES URL POCKETBASE
 // =============================================================
+
+// Détection navigateur
 const isBrowser = typeof window !== "undefined";
-// URL PUBLIQUE DE POCKETBASE ACCESSIBLE DEPUIS LE NAVIGATEUR
+
+// URL publique (toujours pour les fichiers PocketBase)
 const PUBLIC_PB_URL = "https://portfolio.bryan-menoux.fr:8082";
 
-// URL INTERNE (BACKEND / PM2)
+// URL interne (SSR Astro / PM2)
 const INTERNAL_URL = "http://127.0.0.1:8082";
 
-// URL DEV (LOCAL)
+// URL dev locale
 const DEV_URL = "http://127.0.0.1:8090";
+
+// Variables d'environnement (uniquement côté serveur)
 const envUrl =
   typeof process !== "undefined" && process.env?.POCKETBASE_URL
     ? process.env.POCKETBASE_URL
@@ -20,17 +25,20 @@ const envUrl =
 const isDevServer =
   typeof process !== "undefined" && process.env?.LOCAL_DEV === "true";
 
+// URL utilisée pour APPELER PocketBase
 const baseUrl = isBrowser
-  ? PUBLIC_PB_URL // Toujours HTTPS côté navigateur
+  ? PUBLIC_PB_URL // Navigateur → toujours URL publique HTTPS
   : envUrl || (isDevServer ? DEV_URL : INTERNAL_URL);
 
 export const pb = new PocketBase(baseUrl);
-export const POCKETBASE_URL = baseUrl;
 
+// URL utilisée pour les FICHIERS PocketBase (jamais 127.0.0.1 !)
 export const getFileUrl = (collectionId, recordId, filename) => {
   if (!filename) return null;
-  return `${baseUrl}/api/files/${collectionId}/${recordId}/${filename}`;
+  return `${PUBLIC_PB_URL}/api/files/${collectionId}/${recordId}/${filename}`;
 };
+
+export const POCKETBASE_URL = PUBLIC_PB_URL;
 
 // =============================================================
 // CONSTANTES
@@ -50,7 +58,7 @@ const formatCompetence = (competence) => ({
   description: competence.description || "",
   anneesExperience: competence.anneesExperience || 0,
   icone: competence.icone
-    ? pb.files.getURL(competence, competence.icone)
+    ? getFileUrl(competence.collectionId, competence.id, competence.icone)
     : null,
   categorie: competence.categorie,
   created: competence.created,
@@ -109,16 +117,7 @@ export async function createCompetence(data) {
 }
 
 export async function updateCompetence(id, data) {
-  const record = await pb.collection(COLLECTION_COMPETENCES).update(id, {
-    nom: data.nom,
-    level: data.niveau,
-    categorie: data.categorie,
-    description: data.description,
-    anneesExperience: data.anneesExperience,
-    icone: data.icone,
-    projet: data.projet,
-  });
-
+  const record = await pb.collection(COLLECTION_COMPETENCES).update(id, data);
   return formatCompetence(record);
 }
 
@@ -162,12 +161,7 @@ export async function getCompetenceCategories() {
 export async function getCompetencesStats() {
   const records = await pb.collection(COLLECTION_COMPETENCES).getFullList();
 
-  const stats = {
-    total: records.length,
-    byCategory: {},
-    averageLevel: 0,
-  };
-
+  const stats = { total: records.length, byCategory: {}, averageLevel: 0 };
   let totalLevel = 0;
 
   records.forEach((comp) => {
@@ -233,11 +227,12 @@ const formatProjet = (projet) => {
     maquette_visualisation: file(projet.maquette_visualisation),
 
     recherche_logos: Array.isArray(projet.recherche_logos)
-      ? projet.recherche_logos.map((f) => pb.files.getURL(projet, f))
+      ? projet.recherche_logos.map((f) =>
+          getFileUrl(projet.collectionId, projet.id, f)
+        )
       : projet.recherche_logos,
 
     stacks: stackNames,
-
     favori: projet.favori || false,
     slug: projet.slug || "",
     created: projet.created,
@@ -279,7 +274,6 @@ export async function getProjetBySlug(slug) {
     .getFirstListItem(`slug = "${slug}"`, {
       expand: "stack,infoSupp",
     });
-
   return formatProjet(record);
 }
 
@@ -295,14 +289,7 @@ export async function createProjet(data) {
 }
 
 export async function updateProjet(id, data) {
-  const record = await pb.collection(COLLECTION_PROJETS).update(id, {
-    titre: data.titre,
-    description: data.description,
-    infoSupp: data.infoSupp,
-    logo: data.logo,
-    stacks: data.stacks,
-  });
-
+  const record = await pb.collection(COLLECTION_PROJETS).update(id, data);
   return formatProjet(record);
 }
 
