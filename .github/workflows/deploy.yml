@@ -58,4 +58,4 @@ jobs:
             npm install
             npm install astro react react-dom pm2 node
             npm install send server-destroy
-            PORT=8081 pm2 restart portfolio || PORT=8081 pm2 start entry.mjs --name portfolio
+            PORT=8081 HOST=127.0.0.1 pm2 restart portfolio || PORT=8081 HOST=127.0.0.1 pm2 start entry.mjs --name portfolio
