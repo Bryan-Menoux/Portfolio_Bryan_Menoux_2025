@@ -1,13 +1,16 @@
 import PocketBase from "pocketbase";
 
-// Détection de l'environnement (client uniquement)
-const isLocal =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
+// Determine PocketBase URL. Priority:
+// 1. POCKETBASE_URL env var
+// 2. If running in Node dev (NODE_ENV !== 'production'), use localhost
+// 3. Otherwise use production URL
+const envUrl = process.env.POCKETBASE_URL;
+const isNode = typeof process !== "undefined" && process?.versions?.node;
+const isDevNode = isNode && process.env.NODE_ENV !== "production";
 
-// URL de PocketBase
-const baseUrl = isLocal
+const baseUrl = envUrl
+  ? envUrl
+  : isDevNode
   ? "http://127.0.0.1:8090"
   : "https://portfolio.bryan-menoux.fr";
 
@@ -15,6 +18,15 @@ const pb = new PocketBase(baseUrl);
 
 export default pb;
 export const POCKETBASE_URL = baseUrl;
+
+// Fonction helper pour générer les URLs des fichiers
+export const getFileUrl = (collectionId, recordId, filename, isDev = false) => {
+  if (!filename) return null;
+  const url = isDev
+    ? "http://127.0.0.1:8090"
+    : "https://portfolio.bryan-menoux.fr";
+  return `${url}/api/files/${collectionId}/${recordId}/${filename}`;
+};
 
 // ============================================
 // CONSTANTES
@@ -258,7 +270,6 @@ export async function getCompetencesPaginated(page = 1, perPage = 6) {
 // ============================================
 
 const formatProjet = (projet) => {
-  // Récupère les noms des compétences si la relation expand est disponible
   let stackNames = [];
   if (
     projet.expand &&
@@ -267,8 +278,6 @@ const formatProjet = (projet) => {
   ) {
     stackNames = projet.expand.stack.map((comp) => comp.nom);
   }
-
-  // Récupère les infos supplémentaires si la relation expand est disponible
   let infoSuppArray = [];
   if (
     projet.expand &&
@@ -279,30 +288,27 @@ const formatProjet = (projet) => {
       (info) => info.title || info.nom || info.name || ""
     );
   } else if (projet.infoSupp && Array.isArray(projet.infoSupp)) {
-    // Fallback si expand n'est pas disponible et infoSupp est un array
     infoSuppArray = projet.infoSupp;
   } else if (typeof projet.infoSupp === "string") {
-    // Fallback si c'est une string
     infoSuppArray = [projet.infoSupp];
   }
+  const getFileUrl = (filename) => {
+    if (!filename) return null;
+    return `${pb.baseUrl}/api/files/${projet.collectionId}/${projet.id}/${filename}`;
+  };
 
   return {
     id: projet.id,
+    collectionId: projet.collectionId,
     titre: projet.nom || projet.titre || "",
     description: projet.description || "",
     contexte: projet.contexte || "",
     pourquoi: projet.pourquoi || "",
     infoSupp: infoSuppArray,
-    logo: projet.logo ? pb.files.getURL(projet, projet.logo) : null,
-    concept_visualisation: projet.concept_visualisation
-      ? pb.files.getURL(projet, projet.concept_visualisation)
-      : null,
-    moodboard: projet.moodboard
-      ? pb.files.getURL(projet, projet.moodboard)
-      : null,
-    maquette_visualisation: projet.maquette_visualisation
-      ? pb.files.getURL(projet, projet.maquette_visualisation)
-      : null,
+    logo: getFileUrl(projet.logo),
+    concept_visualisation: getFileUrl(projet.concept_visualisation),
+    moodboard: getFileUrl(projet.moodboard),
+    maquette_visualisation: getFileUrl(projet.maquette_visualisation),
     title_h1: projet.title_h1 || "",
     title_h2: projet.title_h2 || "",
     title_h3: projet.title_h3 || "",
@@ -311,6 +317,12 @@ const formatProjet = (projet) => {
     palette: projet.palette || null,
     description_palette: projet.description_palette || "",
     description_logo: projet.description_logo || "",
+    recherche_logos:
+      projet.recherche_logos && Array.isArray(projet.recherche_logos)
+        ? projet.recherche_logos.map((filename) =>
+            pb.files.getURL(projet, filename)
+          )
+        : projet.recherche_logos,
     points_cle: projet.points_cle || "",
     accessibilite: projet.accessibilite || "",
     responsivite: projet.responsivite || "",
@@ -355,7 +367,9 @@ export async function getFavoriProjets() {
 
 export async function getProjetById(id) {
   try {
-    const record = await pb.collection(COLLECTION_PROJETS).getOne(id);
+    const record = await pb.collection(COLLECTION_PROJETS).getOne(id, {
+      expand: "stack,infoSupp",
+    });
     return formatProjet(record);
   } catch (err) {
     console.error("Erreur lors de la récupération du projet :", err);
@@ -367,7 +381,9 @@ export async function getProjetBySlug(slug) {
   try {
     const record = await pb
       .collection(COLLECTION_PROJETS)
-      .getFirstListItem(`slug = "${slug}"`);
+      .getFirstListItem(`slug = "${slug}"`, {
+        expand: "stack,infoSupp",
+      });
     return formatProjet(record);
   } catch (err) {
     console.error("Erreur lors de la récupération du projet par slug :", err);

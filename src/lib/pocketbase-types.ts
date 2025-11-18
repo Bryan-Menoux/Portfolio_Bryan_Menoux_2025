@@ -101,20 +101,52 @@ export enum CompetencesCategorieOptions {
 }
 export type CompetencesRecord = {
 	anneesExperience?: number
-	categorie?: CompetencesCategorieOptions
+	categorie?: CompetencesCategorieOptions[]
 	created: IsoAutoDateString
 	description?: string
 	icone?: FileNameString
 	id: string
 	level?: number
 	nom?: string
-	projet?: RecordIdString
+	projet?: RecordIdString[]
 	updated: IsoAutoDateString
 }
 
-export type ProjetsRecord = {
+export enum ProjetsInfoSuppOptions {
+	"Optimisé uniquement pour mobile" = "Optimisé uniquement pour mobile",
+	"En cours de développement" = "En cours de développement",
+}
+export type ProjetsRecord<Tpalette = unknown> = {
+	accessibilite?: string
+	apprentissage?: string
+	approche?: string
+	concept_visualisation?: FileNameString
+	contexte?: string
+	contraintes?: string
+	corp?: string
 	created: IsoAutoDateString
+	description?: string
+	description_fonts?: string
+	description_logo?: string
+	description_palette?: string
+	essais_logo?: FileNameString[]
+	favori?: boolean
 	id: string
+	infoSupp?: ProjetsInfoSuppOptions
+	lien?: string
+	logo?: FileNameString
+	maquette_visualisation?: FileNameString
+	moodboard?: FileNameString
+	nom?: string
+	palette?: null | Tpalette
+	points_cle?: string
+	pourquoi?: string
+	responsivite?: string
+	slug?: string
+	stack?: RecordIdString[]
+	title_h1?: string
+	title_h2?: string
+	title_h3?: string
 	updated: IsoAutoDateString
 }
 
@@ -138,7 +170,7 @@ export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemF
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type CompetencesResponse<Texpand = unknown> = Required<CompetencesRecord> & BaseSystemFields<Texpand>
-export type ProjetsResponse<Texpand = unknown> = Required<ProjetsRecord> & BaseSystemFields<Texpand>
+export type ProjetsResponse<Tpalette = unknown, Texpand = unknown> = Required<ProjetsRecord<Tpalette>> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions

@@ -1,0 +1,80 @@
+---
+import grilles from "../assets/grilles.webp";
+
+interface Props {
+  projet: any;
+}
+
+const { projet } = Astro.props;
+const hasRecherche =
+  projet.recherche_logos && projet.recherche_logos.length > 0;
+---
+
+{
+  (projet.logo || projet.description_logo) && (
+    <section
+      class="w-full h-fit py-8"
+      style={`background-image: url(${grilles.src}); background-position: center; background-size: cover;`}
+      id="logo"
+    >
+      <h2 class="h2 text-center px-4 mb-8">
+        &lt;LE <span class="text-primary">LOGO</span>&gt;
+      </h2>
+      <div class="w-full flex justify-center px-3">
+        <div class="w-full max-w-7xl flex flex-col gap-4 h-auto lg:h-[40dvh]">
+          {/* Container des 3 divs */}
+          <div class="flex flex-col lg:flex-row gap-4 h-full">
+            {/* Logo Final - Left */}
+            <div class="w-full lg:flex-1 rounded-2xl overflow-hidden relative flex flex-col items-start justify-start gap-4 p-4 bg-[radial-gradient(circle_at_center,rgba(53,63,82,0.75)_0%,rgba(45,54,71,0.75)_100%)] border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] backdrop-blur-[50px] h-auto lg:h-full">
+              <div class="noise" />
+              <div class="h3 text-center mb-2 shrink-0 relative z-20">
+                Final
+              </div>
+              {projet.logo && (
+                <img
+                  src={projet.logo}
+                  alt="Logo Final"
+                  loading="lazy"
+                  class="relative z-10 object-contain max-w-[90%] max-h-[90%] w-auto h-auto self-center flex-1"
+                />
+              )}
+            </div>
+
+            {hasRecherche && (
+              <div class="w-full lg:w-[8dvw] rounded-2xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-4 flex flex-col lg:shrink-0 h-auto lg:h-full">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(53,63,82,0.75)_0%,rgba(45,54,71,0.75)_100%)]" />
+                <div class="noise absolute inset-0" />
+                <h3 class="h3 text-left lg:text-center mb-2 shrink-0 relative z-20">
+                  Essais
+                </h3>
+                <div class="relative z-20 flex-1 w-full flex flex-row lg:flex-col items-center lg:items-center justify-between lg:justify-center gap-3 overflow-x-auto lg:overflow-y-auto">
+                  {projet.recherche_logos.map((imgUrl: string, idx: number) => (
+                    <img
+                      src={imgUrl}
+                      alt={`Essai ${idx + 1}`}
+                      loading="lazy"
+                      class="rounded-md object-contain w-16 h-16 shrink-0"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div class="w-full lg:flex-1 rounded-2xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] h-auto lg:h-full">
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(53,63,82,0.75)_0%,rgba(45,54,71,0.75)_100%)]" />
+              <div class="noise absolute inset-0" />
+              <div class="relative z-20 w-full h-full p-4 flex flex-col justify-start overflow-y-auto">
+                <h3 class="h3  mb-3 shrink-0">Logo</h3>
+                {projet.description_logo && (
+                  <p class="leading-relaxed text-justify">
+                    {projet.description_logo}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

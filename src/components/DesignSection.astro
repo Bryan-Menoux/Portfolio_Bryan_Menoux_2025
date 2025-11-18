@@ -1,0 +1,120 @@
+---
+interface Props {
+  projet: any;
+}
+
+const { projet } = Astro.props;
+---
+
+{
+  (projet.moodboard ||
+    projet.title_h1 ||
+    projet.title_h2 ||
+    projet.title_h3 ||
+    projet.corp ||
+    projet.description_fonts ||
+    projet.palette ||
+    projet.description_palette) && (
+    <section class="w-full py-8 sm:py-12 md:py-16 lg:py-32 px-3 sm:px-4 bg-linear-to-b from-black/20 to-black/40 relative overflow-hidden">
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350dvw] h-[350dvw] md:w-[250dvw] md:h-[250dvw] lg:w-[125dvw] lg:h-[125dvw] rounded-full pointer-events-none blur-3xl"
+        style="background: radial-gradient(circle at center, rgba(118, 101, 243, 0.4) 0%, rgba(68, 59, 128, 0.15) 50%, rgba(68, 59, 128, 0) 100%);"
+      />
+
+      <div class="max-w-7xl mx-auto relative z-10">
+        <h2 class="h2 mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-center">
+          &lt;LE <span class="text-primary">DESIGN</span>&gt;
+        </h2>
+
+        <div class="flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+          {projet.moodboard && (
+            <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <div class="bg-black/40 p-3 sm:p-4 md:p-5 lg:p-6 border-b border-white/10">
+                <h3 class="h3">Moodboard.exe</h3>
+              </div>
+              <img
+                src={projet.moodboard}
+                alt="Moodboard"
+                class="w-full h-auto object-cover aspect-video"
+              />
+            </div>
+          )}
+          {(projet.title_h1 ||
+            projet.title_h2 ||
+            projet.title_h3 ||
+            projet.corp ||
+            projet.description_fonts) && (
+            <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+              <div class="bg-black/40 p-3 sm:p-4 md:p-5 lg:p-6 border-b border-white/10">
+                <h3 class="h3">Fonts.exe</h3>
+              </div>
+              <div class="bg-black/20 p-3 sm:p-4 md:p-5 lg:p-6 space-y-2 sm:space-y-3 md:space-y-3 lg:space-y-4">
+                {projet.title_h1 && (
+                  <div>
+                    <p class="uppercase tracking-wider mb-1">H1</p>
+                    <p class="h1">{projet.title_h1}</p>
+                  </div>
+                )}
+                {projet.title_h2 && (
+                  <div>
+                    <p class="uppercase tracking-wider mb-1">H2</p>
+                    <p class="h2">{projet.title_h2}</p>
+                  </div>
+                )}
+                {projet.title_h3 && (
+                  <div>
+                    <p class="uppercase tracking-wider mb-1">H3</p>
+                    <p class="h3">{projet.title_h3}</p>
+                  </div>
+                )}
+                {projet.corp && (
+                  <div>
+                    <p class="uppercase tracking-wider mb-1">Body</p>
+                    <p>{projet.corp}</p>
+                  </div>
+                )}
+                {projet.description_fonts && (
+                  <div class="pt-2 sm:pt-3 md:pt-3 lg:pt-4 border-t border-white/10">
+                    <p class="leading-relaxed">{projet.description_fonts}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {(projet.palette || projet.description_palette) && (
+            <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+              <div class="bg-black/40 p-3 sm:p-4 md:p-5 lg:p-6 border-b border-white/10">
+                <h3 class="h3">Palette.exe</h3>
+              </div>
+              <div class="bg-black/20 p-3 sm:p-4 md:p-5 lg:p-6 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+                {projet.palette && Array.isArray(projet.palette) && (
+                  <div
+                    class={`${projet.palette.length > 6 ? "grid gap-2 sm:gap-2 md:gap-3 lg:gap-3" : "flex gap-2 sm:gap-2 md:gap-3 lg:gap-3"} w-full`}
+                    style={
+                      projet.palette.length > 6
+                        ? `grid-template-columns: repeat(${Math.ceil(projet.palette.length / 2)}, 1fr);`
+                        : ""
+                    }
+                  >
+                    {projet.palette.map((color: any) => (
+                      <div
+                        class={`${projet.palette.length <= 6 ? "flex-1" : ""} h-10 sm:h-12 md:h-14 lg:h-16 rounded-lg border border-white/20 shadow-md`}
+                        style={`background-color: ${color.hex || color}; background-image: none !important;`}
+                        title={color.name}
+                      />
+                    ))}
+                  </div>
+                )}
+                {projet.description_palette && (
+                  <div class="pt-2 sm:pt-3 md:pt-3 lg:pt-4 border-t border-white/10">
+                    <p class="leading-relaxed">{projet.description_palette}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
