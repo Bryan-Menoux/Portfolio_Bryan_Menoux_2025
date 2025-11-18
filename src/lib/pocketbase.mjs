@@ -3,9 +3,7 @@ import PocketBase from "pocketbase";
 // =============================================================
 // CONFIGURATION DES URL POCKETBASE
 // =============================================================
-
-const envUrl = process.env.POCKETBASE_URL;
-
+const isBrowser = typeof window !== "undefined";
 // URL PUBLIQUE DE POCKETBASE ACCESSIBLE DEPUIS LE NAVIGATEUR
 const PUBLIC_PB_URL = "https://portfolio.bryan-menoux.fr:8082";
 
@@ -14,16 +12,17 @@ const INTERNAL_URL = "http://127.0.0.1:8082";
 
 // URL DEV (LOCAL)
 const DEV_URL = "http://127.0.0.1:8090";
+const envUrl =
+  typeof process !== "undefined" && process.env?.POCKETBASE_URL
+    ? process.env.POCKETBASE_URL
+    : null;
 
-const isBrowser = typeof window !== "undefined";
+const isDevServer =
+  typeof process !== "undefined" && process.env?.LOCAL_DEV === "true";
 
-const baseUrl = envUrl
-  ? envUrl
-  : isBrowser
-  ? PUBLIC_PB_URL // ON UTILISE L’URL HTTPS PUBLIQUE EN FRONT
-  : process.env.LOCAL_DEV === "true"
-  ? DEV_URL
-  : INTERNAL_URL;
+const baseUrl = isBrowser
+  ? PUBLIC_PB_URL // Toujours HTTPS côté navigateur
+  : envUrl || (isDevServer ? DEV_URL : INTERNAL_URL);
 
 export const pb = new PocketBase(baseUrl);
 export const POCKETBASE_URL = baseUrl;
