@@ -9,7 +9,7 @@ const envUrl = process.env.POCKETBASE_URL;
 
 // 2. URL publique (utilisée par le navigateur)
 // IMPORTANT : le navigateur NE PEUT PAS appeler 127.0.0.1 du serveur
-const PUBLIC_URL = "https://pb-portfolio.bryan-menoux.fr";
+const PUBLIC_URL = "https://portfolio.bryan-menoux.fr";
 
 // 3. URL interne (communication serveur → PocketBase)
 const INTERNAL_URL = "http://127.0.0.1:8082";
