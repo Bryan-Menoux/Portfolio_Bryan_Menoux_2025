@@ -4,24 +4,17 @@ import PocketBase from "pocketbase";
 // CONFIGURATION DES URL POCKETBASE
 // =============================================================
 
-// 1. Priorité absolue : variable d'environnement
 const envUrl = process.env.POCKETBASE_URL;
 
-// 2. URL publique (utilisée par le navigateur)
-// IMPORTANT : le navigateur NE PEUT PAS appeler 127.0.0.1 du serveur
 const PUBLIC_URL = "https://portfolio.bryan-menoux.fr";
 
-// 3. URL interne (communication serveur → PocketBase)
 const INTERNAL_URL = "http://127.0.0.1:8082";
 
-// 4. URL en développement local
 const DEV_URL = "http://127.0.0.1:8090";
 
-// Contexte
 const isBrowser = typeof window !== "undefined";
 const isNode = typeof process !== "undefined" && process.versions?.node;
 
-// Sélection finale de l’URL
 const baseUrl = envUrl
   ? envUrl
   : isBrowser
@@ -30,14 +23,12 @@ const baseUrl = envUrl
   ? DEV_URL
   : INTERNAL_URL;
 
-// Instanciation PocketBase
 export const pb = new PocketBase(baseUrl);
 export const POCKETBASE_URL = baseUrl;
 
-// Helper fichiers
-export const getFileUrl = (collectionId, recordId, filename) => {
+export const getFileUrl = (collection, record, filename) => {
   if (!filename) return null;
-  return `${baseUrl}/api/files/${collectionId}/${recordId}/${filename}`;
+  return `/api/pb-file?collection=${collection}&record=${record}&file=${filename}`;
 };
 
 // =============================================================
@@ -312,10 +303,18 @@ const formatProjet = (projet) => {
     contexte: projet.contexte || "",
     pourquoi: projet.pourquoi || "",
     infoSupp: infoSuppArray,
-    logo: file(projet.logo),
-    concept_visualisation: file(projet.concept_visualisation),
-    moodboard: file(projet.moodboard),
-    maquette_visualisation: file(projet.maquette_visualisation),
+    logo: getFileUrl(projet.collectionId, projet.id, projet.logo),
+    concept_visualisation: getFileUrl(
+      projet.collectionId,
+      projet.id,
+      projet.concept_visualisation
+    ),
+    moodboard: getFileUrl(projet.collectionId, projet.id, projet.moodboard),
+    maquette_visualisation: getFileUrl(
+      projet.collectionId,
+      projet.id,
+      projet.maquette_visualisation
+    ),
     title_h1: projet.title_h1 || "",
     title_h2: projet.title_h2 || "",
     title_h3: projet.title_h3 || "",
