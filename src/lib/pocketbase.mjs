@@ -1,24 +1,10 @@
 import PocketBase from "pocketbase";
 
-// =============================================================
-// CONFIGURATION DES URL POCKETBASE
-// =============================================================
-
-// Détection navigateur
 const isBrowser = typeof window !== "undefined";
-
-// URL publique (toujours pour les fichiers PocketBase)
-// Note: Utilise le chemin /pocketbase si configuré via reverse proxy, sinon ajuste selon ta config
 const PUBLIC_PB_URL = "https://portfolio.bryan-menoux.fr";
-
-// URL interne (SSR Astro / PM2) - Accès direct depuis le serveur
-// À adapter selon ta config: peut être http://pocketbase:8090 en Docker, ou http://127.0.0.1:8082, etc.
 const INTERNAL_URL = "http://127.0.0.1:8082";
-
-// URL dev locale
 const DEV_URL = "http://127.0.0.1:8090";
 
-// Variables d'environnement (uniquement côté serveur)
 const envUrl =
   typeof process !== "undefined" && process.env?.POCKETBASE_URL
     ? process.env.POCKETBASE_URL
@@ -29,29 +15,19 @@ const isDevMode =
   (process.env?.NODE_ENV === "development" ||
     process.env?.ASTRO_BUILDTIME === "false");
 
-// URL utilisée pour APPELER PocketBase
 const baseUrl = isBrowser
-  ? PUBLIC_PB_URL // Navigateur → toujours URL publique HTTPS
+  ? PUBLIC_PB_URL
   : envUrl || (isDevMode ? DEV_URL : INTERNAL_URL);
 
 export const pb = new PocketBase(baseUrl);
 
-// URL utilisée pour les FICHIERS PocketBase (jamais 127.0.0.1 !)
 export const getFileUrl = (collectionId, recordId, filename) => {
   if (!filename) return null;
   return `${PUBLIC_PB_URL}/api/files/${collectionId}/${recordId}/${filename}`;
 };
 
-// ============================================
-// CONSTANTES
-// ============================================
-
 const COLLECTION_COMPETENCES = "competences";
 const COLLECTION_PROJETS = "projets";
-
-// ============================================
-// UTILITAIRES
-// ============================================
 
 const formatCompetence = (competence) => ({
   id: competence.id,
@@ -65,9 +41,7 @@ const formatCompetence = (competence) => ({
   categorie: competence.categorie,
   created: competence.created,
   updated: competence.updated,
-}); // ============================================
-// FONCTIONS - COMPETENCES
-// ============================================
+});
 
 export async function getAllCompetences() {
   try {
@@ -278,10 +252,6 @@ export async function getCompetencesPaginated(page = 1, perPage = 6) {
     throw err;
   }
 }
-
-// ============================================
-// FONCTIONS - PROJETS
-// ============================================
 
 const formatProjet = (projet) => {
   let stackNames = [];
