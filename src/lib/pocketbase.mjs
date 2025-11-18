@@ -1,30 +1,31 @@
 import PocketBase from "pocketbase";
 
-export const getPocketBaseURL = () => {
-  if (import.meta.env.PROD) {
-    return "https://portfolio.bryan-menoux.fr:8082";
-  }
-  return "http://127.0.0.1:8090";
-};
+// Determine PocketBase URL. Priority:
+// 1. POCKETBASE_URL env var
+// 2. If running in Node dev (NODE_ENV !== 'production'), use localhost
+// 3. Otherwise use production URL
+const envUrl = process.env.POCKETBASE_URL;
+const isNode = typeof process !== "undefined" && process?.versions?.node;
+const isDevNode = isNode && process.env.NODE_ENV !== "production";
 
-export const POCKETBASE_URL = getPocketBaseURL();
+const baseUrl = envUrl
+  ? envUrl
+  : isDevNode
+  ? "http://127.0.0.1:8090"
+  : "https://portfolio.bryan-menoux.fr";
 
-const pb = new PocketBase(POCKETBASE_URL);
+const pb = new PocketBase(baseUrl);
 
 export default pb;
+export const POCKETBASE_URL = baseUrl;
 
 // Fonction helper pour générer les URLs des fichiers
-export const getFileUrl = (
-  collectionId,
-  recordId,
-  filename,
-  isDev = !import.meta.env.PROD
-) => {
+export const getFileUrl = (collectionId, recordId, filename, isDev = false) => {
   if (!filename) return null;
-  const base = isDev
+  const url = isDev
     ? "http://127.0.0.1:8090"
-    : "https://portfolio.bryan-menoux.fr:8082";
-  return `${base}/api/files/${collectionId}/${recordId}/${filename}`;
+    : "https://portfolio.bryan-menoux.fr";
+  return `${url}/api/files/${collectionId}/${recordId}/${filename}`;
 };
 
 // ============================================
