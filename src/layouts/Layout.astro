@@ -26,9 +26,10 @@ const { title = "Portfolio Bryan Menoux" } = Astro.props;
     <title>{title}</title>
   </head>
 
-  <body class="flex flex-col gap-16 md:gap-32 lg:gap-48">
+  <body>
     <Header />
     <slot />
+    <div class="h-16 md:h-32 lg:h-48"></div>
     <Footer />
   </body>
 </html>
