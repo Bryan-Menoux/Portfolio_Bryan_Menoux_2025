@@ -1,0 +1,89 @@
+---
+interface Props {
+  projet: any;
+}
+
+const { projet } = Astro.props;
+---
+
+{
+  projet.maquette_visualisation && (
+    <section class="w-full py-8 sm:py-12 md:py-16 lg:py-32 px-3 sm:px-4 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto relative z-10">
+        <h2 class="mb-4 sm:mb-6 md:mb-8 lg:mb-12 text-center h2">
+          &lt;LA <span class="text-primary">MAQUETTE</span>&gt;
+        </h2>
+
+        <div class="flex flex-col lg:grid gap-3 sm:gap-4 md:gap-5 lg:gap-6 lg:grid-cols-2 lg:items-stretch min-h-auto sm:min-h-[40dvh] md:min-h-[55dvh] lg:h-[60dvh]">
+          {/* Section gauche - Points clés */}
+          <div class="w-full flex flex-col gap-3 sm:gap-4 md:h-full lg:h-full order-2 lg:order-1">
+            {/* Points clés du design */}
+            <div class="w-full h-[35dvh] sm:h-[40dvh] md:h-auto lg:h-1/2 rounded-2xl sm:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px]">
+              <div
+                class="absolute inset-0"
+                style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+              />
+              <div class="noise absolute inset-0" />
+              <div class="absolute inset-0 pointer-events-none bg-linear-to-t from-black/60 to-transparent" />
+              <div class="relative z-20 w-full h-full p-4 sm:p-6 md:p-8 flex flex-col justify-start">
+                <h3 class="mb-2 sm:mb-3 h3">Points clés du design</h3>
+                <p>
+                  {projet.description ||
+                    "Ce projet a été conçu pour s'adapter à tous les supports, du mobile à l'ordinateur. La responsivité et l'optimisation du contenu garantissent une navigation fluide et intuitive."}
+                </p>
+              </div>
+            </div>
+
+            {/* Accessibilité et Responsivité */}
+            <div class="w-full flex flex-col sm:flex-row gap-3 sm:gap-4 lg:h-1/2">
+              <div
+                class="w-full sm:flex-1 h-auto rounded-2xl sm:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] flex flex-col justify-between p-3 sm:p-4 md:p-6 transition-all duration-300 min-h-[180px]"
+                style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+              >
+                <div class="noise absolute inset-0" />
+                <div class="absolute inset-0 pointer-events-none bg-linear-to-t from-black/60 to-transparent" />
+                <div class="w-full relative z-20 flex flex-col justify-start gap-1 sm:gap-2">
+                  <h3 class="mb-1 sm:mb-2 h3">Accessibilité</h3>
+                  <p>
+                    Pensée dès le départ pour garantir la même expérience sur
+                    tous les supports.
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="w-full sm:flex-1 h-auto rounded-2xl sm:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] flex flex-col justify-between p-3 sm:p-4 md:p-6 transition-all duration-300 min-h-[180px]"
+                style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+              >
+                <div class="noise absolute inset-0" />
+                <div class="absolute inset-0 pointer-events-none bg-linear-to-t from-black/60 to-transparent" />
+                <div class="w-full relative z-20 flex flex-col justify-start gap-1 sm:gap-2">
+                  <h3 class="mb-1 sm:mb-2 h3">Responsivité</h3>
+                  <p>
+                    Optimisée pour tous les supports avec une expérience
+                    cohérente.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section droite - Image de la maquette */}
+          <div class="w-full h-[35dvh] sm:h-[40dvh] md:h-[52dvh] lg:h-full rounded-2xl sm:rounded-3xl overflow-hidden relative flex items-center justify-center shadow-lg hover:shadow-2xl transition-shadow duration-300 py-4 md:py-8 lg:py-16 order-1 lg:order-2">
+            <div
+              class="absolute inset-0"
+              style="background: radial-gradient(circle at center, #7665F3 0%, #7665F3 38%, #4C39D8 100%);"
+            />
+            <div class="noise absolute inset-0" />
+            <img
+              src={projet.maquette_visualisation}
+              alt="Maquette visualization"
+              loading="lazy"
+              class="relative z-10 w-auto h-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

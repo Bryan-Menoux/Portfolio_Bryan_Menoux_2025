@@ -4,7 +4,9 @@ import HeroProjets from "../../components/HeroProjets.astro";
 import ConceptSection from "../../components/ConceptSection.astro";
 import DesignSection from "../../components/DesignSection.astro";
 import LogoSection from "../../components/LogoSection.astro";
+import MaquetteSection from "../../components/MaquetteSection.astro";
 import { getProjetBySlug, getFavoriProjets } from "../../lib/pocketbase.mjs";
+import DeveloppementSection from "../../components/DeveloppementSection.astro";
 
 export const prerender = false;
 
@@ -22,5 +24,7 @@ if (!projet) {
     <ConceptSection {projet} />
     <DesignSection {projet} />
     <LogoSection {projet} />
+    <MaquetteSection {projet} />
+    <DeveloppementSection {projet} />
   </div>
 </Layout>

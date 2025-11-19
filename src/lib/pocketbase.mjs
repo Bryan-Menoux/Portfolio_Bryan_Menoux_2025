@@ -23,7 +23,20 @@ export const pb = new PocketBase(baseUrl);
 
 export const getFileUrl = (collectionId, recordId, filename) => {
   if (!filename) return null;
-  return `${PUBLIC_PB_URL}/api/files/${collectionId}/${recordId}/${filename}`;
+  const fileBaseUrl = isDevMode ? DEV_URL : PUBLIC_PB_URL;
+  return `${fileBaseUrl}/api/files/${collectionId}/${recordId}/${filename}`;
+};
+
+export const getFileUrlWithCache = (
+  collectionId,
+  recordId,
+  filename,
+  updated
+) => {
+  if (!filename) return null;
+  const fileBaseUrl = isDevMode ? DEV_URL : PUBLIC_PB_URL;
+  const timestamp = updated ? new Date(updated).getTime() : Date.now();
+  return `${fileBaseUrl}/api/files/${collectionId}/${recordId}/${filename}?t=${timestamp}`;
 };
 
 const COLLECTION_COMPETENCES = "competences";
@@ -285,17 +298,29 @@ const formatProjet = (projet) => {
     contexte: projet.contexte || "",
     pourquoi: projet.pourquoi || "",
     infoSupp: infoSuppArray,
-    logo: getFileUrl(COLLECTION_PROJETS, projet.id, projet.logo),
-    concept_visualisation: getFileUrl(
+    logo: getFileUrlWithCache(
       COLLECTION_PROJETS,
       projet.id,
-      projet.concept_visualisation
+      projet.logo,
+      projet.updated
     ),
-    moodboard: getFileUrl(COLLECTION_PROJETS, projet.id, projet.moodboard),
-    maquette_visualisation: getFileUrl(
+    concept_visualisation: getFileUrlWithCache(
       COLLECTION_PROJETS,
       projet.id,
-      projet.maquette_visualisation
+      projet.concept_visualisation,
+      projet.updated
+    ),
+    moodboard: getFileUrlWithCache(
+      COLLECTION_PROJETS,
+      projet.id,
+      projet.moodboard,
+      projet.updated
+    ),
+    maquette_visualisation: getFileUrlWithCache(
+      COLLECTION_PROJETS,
+      projet.id,
+      projet.maquette_visualisation,
+      projet.updated
     ),
     title_h1: projet.title_h1 || "",
     title_h2: projet.title_h2 || "",
@@ -308,7 +333,12 @@ const formatProjet = (projet) => {
     recherche_logos:
       projet.recherche_logos && Array.isArray(projet.recherche_logos)
         ? projet.recherche_logos.map((filename) =>
-            getFileUrl(COLLECTION_PROJETS, projet.id, filename)
+            getFileUrlWithCache(
+              COLLECTION_PROJETS,
+              projet.id,
+              filename,
+              projet.updated
+            )
           )
         : projet.recherche_logos,
     points_cle: projet.points_cle || "",
@@ -331,6 +361,7 @@ export async function getAllProjets() {
     const records = await pb.collection(COLLECTION_PROJETS).getFullList({
       sort: "created",
       expand: "stack,infoSupp",
+      requestKey: `all-projets-${Date.now()}`,
     });
     return records.map(formatProjet);
   } catch (err) {
@@ -345,6 +376,7 @@ export async function getFavoriProjets() {
       filter: "favori = true",
       sort: "created",
       expand: "stack,infoSupp",
+      requestKey: `favori-projets-${Date.now()}`,
     });
     return records.map(formatProjet);
   } catch (err) {
@@ -371,6 +403,7 @@ export async function getProjetBySlug(slug) {
       .collection(COLLECTION_PROJETS)
       .getFirstListItem(`slug = "${slug}"`, {
         expand: "stack,infoSupp",
+        requestKey: `projet-${slug}-${Date.now()}`,
       });
     return formatProjet(record);
   } catch (err) {
