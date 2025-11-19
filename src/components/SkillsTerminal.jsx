@@ -528,6 +528,7 @@ const SkillsFolderViewer = ({ category, skills, onClose, categoryName }) => {
                       <img
                         src={selectedSkill.icone}
                         alt={selectedSkill.name}
+                        loading="lazy"
                         className="w-20 md:w-24 lg:w-24 h-20 md:h-24 lg:h-24 object-contain shrink-0"
                       />
                     ) : (
@@ -613,6 +614,7 @@ const SkillsFolderViewer = ({ category, skills, onClose, categoryName }) => {
                           <img
                             src={skill.icone}
                             alt={skill.name}
+                            loading="lazy"
                             className="w-10 md:w-12 lg:w-12 h-10 md:h-12 lg:h-12 object-contain group-hover:scale-110 transition-transform"
                           />
                         ) : (

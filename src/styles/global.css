@@ -6,6 +6,10 @@ html {
   scroll-behavior: smooth;
 }
 
+p {
+  font-family: var(--font-poppins);
+}
+
 @theme {
   /* Base colors - Dark theme */
   --color-base-100: oklch(14% 0.004 49.25);
@@ -60,27 +64,27 @@ html {
 
 /* Text Styles */
 @layer components {
-  /* H1 - Desktop */
+  /* H1 - Mobile first, responsive */
   .h1 {
-    @apply font-bold text-[64px] leading-tight uppercase tracking-normal;
+    @apply font-bold text-[48px] leading-tight uppercase tracking-normal;
     font-family: var(--font-sora);
   }
 
-  /* H2 - Desktop */
+  /* H2 - Mobile first, responsive */
   .h2 {
-    @apply font-bold text-[40px] leading-tight uppercase tracking-normal;
+    @apply font-bold text-[32px] leading-tight uppercase tracking-normal;
     font-family: var(--font-sora);
   }
 
-  /* H3 - Desktop */
+  /* H3 - Mobile first, responsive */
   .h3 {
-    @apply font-bold text-[28px] leading-tight tracking-normal;
+    @apply font-bold text-[20px] leading-tight tracking-normal;
     font-family: var(--font-sora);
   }
 
-  /* H4 - Desktop */
+  /* H4 - Mobile first, responsive */
   .h4 {
-    @apply font-bold text-[20px] leading-tight tracking-normal;
+    @apply font-bold text-[18px] leading-tight tracking-normal;
     font-family: var(--font-sora);
   }
 
@@ -136,5 +140,24 @@ html {
 
   .skill-container--cta-hover .btn-skill-link .icon {
     transform: translateX(0.375rem);
+  }
+}
+
+/* Responsive typography - Desktop breakpoint (md) */
+@media (min-width: 768px) {
+  .h1 {
+    font-size: 64px;
+  }
+
+  .h2 {
+    font-size: 40px;
+  }
+
+  .h3 {
+    font-size: 28px;
+  }
+
+  .h4 {
+    font-size: 20px;
   }
 }

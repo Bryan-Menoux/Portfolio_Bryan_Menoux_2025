@@ -85,6 +85,7 @@ function ProjectCard({ project }) {
                 <img
                   src={project.logo}
                   alt={project.titre}
+                  loading="lazy"
                   className="w-full h-full object-contain object-center"
                 />
               </div>

@@ -115,6 +115,44 @@ export async function getCompetenceById(id) {
   }
 }
 
+export async function getCompetencesByIds(ids) {
+  try {
+    if (!ids || ids.length === 0) {
+      return [];
+    }
+    const filter = ids.map((id) => `id = "${id}"`).join(" || ");
+    const records = await pb.collection(COLLECTION_COMPETENCES).getFullList({
+      filter: filter,
+    });
+    return records.map(formatCompetence);
+  } catch (err) {
+    console.error(
+      "Erreur lors de la récupération des compétences par IDs :",
+      err
+    );
+    throw err;
+  }
+}
+
+export async function getCompetencesByNames(names) {
+  try {
+    if (!names || names.length === 0) {
+      return [];
+    }
+    const filter = names.map((name) => `nom = "${name}"`).join(" || ");
+    const records = await pb.collection(COLLECTION_COMPETENCES).getFullList({
+      filter: filter,
+    });
+    return records.map(formatCompetence);
+  } catch (err) {
+    console.error(
+      "Erreur lors de la récupération des compétences par noms :",
+      err
+    );
+    throw err;
+  }
+}
+
 export async function createCompetence(data) {
   try {
     const record = await pb.collection(COLLECTION_COMPETENCES).create({
