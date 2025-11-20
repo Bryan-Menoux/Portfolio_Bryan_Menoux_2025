@@ -64,9 +64,11 @@ const hasContent =
                     ? 2
                     : stackCompetences.length === 4
                       ? 2
-                      : stackCompetences.length === 5 || stackCompetences.length === 7
+                      : stackCompetences.length === 5 ||
+                          stackCompetences.length === 7
                         ? 2
-                        : stackCompetences.length === 6 || stackCompetences.length === 8
+                        : stackCompetences.length === 6 ||
+                            stackCompetences.length === 8
                           ? 2
                           : 2
               }, minmax(0, 1fr));
