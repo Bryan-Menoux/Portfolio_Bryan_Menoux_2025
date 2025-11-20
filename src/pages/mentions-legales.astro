@@ -18,7 +18,36 @@ import Layout from "../layouts/Layout.astro";
       </div>
     </div>
 
-    <div class="max-w-4xl w-full relative z-10">
+    <div class="max-w-7xl w-full relative z-10 flex gap-12 pl-0 lg:pl-64">
+      <nav class="hidden lg:flex flex-col gap-3 fixed left-8 top-32 h-fit w-48 text-sm shrink-0 z-40">
+        <p class="font-semibold text-white/80 mb-2">Sommaire</p>
+        <a href="#general" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          Informations
+        </a>
+        <a href="#hebergeur" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          Hébergeur
+        </a>
+        <a href="#propriete" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          Propriété IP
+        </a>
+        <a href="#donnees" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          RGPD
+        </a>
+        <a href="#cookies" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          Cookies
+        </a>
+        <a href="#conditions" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          Conditions
+        </a>
+        <a href="#responsabilite" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          Responsabilité
+        </a>
+        <a href="#contact" class="text-white/60 hover:text-primary transition-colors pl-4 border-l-2 border-white/10 hover:border-primary/50">
+          Contact
+        </a>
+      </nav>
+
+      <div class="w-full">
       <div class="text-center mb-16 md:mb-20">
         <h1
           class="h1 text-center mb-4 text-transparent bg-clip-text bg-linear-to-r from-white via-primary to-white"
@@ -33,8 +62,9 @@ import Layout from "../layouts/Layout.astro";
       <div class="space-y-6 md:space-y-8">
         {/* Section 1 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="general"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -104,8 +134,9 @@ import Layout from "../layouts/Layout.astro";
 
         {/* Section 2 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="hebergeur"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -136,8 +167,9 @@ import Layout from "../layouts/Layout.astro";
 
         {/* Section 3 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="propriete"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -256,8 +288,9 @@ import Layout from "../layouts/Layout.astro";
 
         {/* Section 4 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="donnees"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -369,8 +402,9 @@ import Layout from "../layouts/Layout.astro";
 
         {/* Section 5 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="cookies"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -392,8 +426,9 @@ import Layout from "../layouts/Layout.astro";
 
         {/* Section 6 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="conditions"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -448,8 +483,9 @@ import Layout from "../layouts/Layout.astro";
 
         {/* Section 7 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="responsabilite"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -514,8 +550,9 @@ import Layout from "../layouts/Layout.astro";
 
         {/* Section 8 */}
         <div
-          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300"
+          class="w-full rounded-2xl md:rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px] p-6 md:p-8 lg:p-10 group hover:border-primary/30 transition-all duration-300 scroll-mt-32"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+          id="contact"
         >
           <div class="noise absolute inset-0"></div>
           <div
@@ -546,5 +583,13 @@ import Layout from "../layouts/Layout.astro";
   .noise {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='1' /%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     opacity: 0.05;
+  }
+
+  nav {
+    scroll-behavior: smooth;
+  }
+
+  nav a {
+    scroll-margin-top: 128px;
   }
 </style>
