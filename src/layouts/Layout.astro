@@ -5,9 +5,21 @@ import Footer from "../components/Footer.astro";
 
 interface Props {
   title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
 }
 
-const { title = "Portfolio Bryan Menoux" } = Astro.props;
+const {
+  title = "Portfolio Bryan Menoux - Développeur Web Fullstack UI/UX",
+  description = "Découvrez mon portfolio professionnel. Je suis développeur web fullstack spécialisé en UI/UX. Consultez mes projets, compétences et expériences.",
+  image = "/icons/icon-512.png",
+  url = "https://bryanmenoux.fr",
+} = Astro.props;
+
+const siteTitle = title.includes("Portfolio")
+  ? title
+  : `${title} | Portfolio Bryan Menoux`;
 ---
 
 <!doctype html>
@@ -15,15 +27,51 @@ const { title = "Portfolio Bryan Menoux" } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta name="description" content={description} />
+    <meta
+      name="keywords"
+      content="développeur web, fullstack, UI/UX, portfolio, React, Astro, JavaScript, TypeScript"
+    />
+    <meta name="author" content="Bryan Menoux" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:url" content={url} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
+    <link rel="canonical" href={url} />
+
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+    <link rel="icon" type="image/svg+xml" href="/icons/logo.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <meta name="theme-color" content="#000000" />
+    <meta name="msapplication-TileColor" content="#000000" />
+
     <meta name="generator" content={Astro.generator} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>{title}</title>
+
+    <title>{siteTitle}</title>
   </head>
 
   <body>
@@ -43,3 +91,19 @@ const { title = "Portfolio Bryan Menoux" } = Astro.props;
     overflow-x: visible;
   }
 </style>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Bryan Menoux",
+    "url": "https://bryanmenoux.fr",
+    "image": "https://bryanmenoux.fr/icons/icon-512.png",
+    "jobTitle": "Développeur Web Fullstack | UI/UX",
+    "description": "Développeur web fullstack spécialisé en UI/UX. Découvrez mes projets, compétences et expériences.",
+    "sameAs": [
+      "https://github.com/Bryan-Menoux",
+      "https://www.linkedin.com/in/bryan-menoux/"
+    ]
+  }
+</script>
