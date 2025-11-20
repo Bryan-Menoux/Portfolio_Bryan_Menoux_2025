@@ -39,58 +39,91 @@ const hasContent =
         &lt;LE <span class="text-primary">DÉVELOPPEMENT</span>&gt;
       </h2>
       <div
-        class="max-w-7xl grid gap-4 md:gap-5 lg:gap-6 mt-6 sm:mt-8 md:mt-10 lg:mt-12 px-4 relative z-10 w-full auto-cols-max"
+        class="max-w-7xl gap-4 md:gap-5 lg:gap-6 mt-6 sm:mt-8 md:mt-10 lg:mt-12 px-4 relative z-10 w-full"
         style={`
-          display: grid;
-          grid-template-columns: auto 1fr;
+          display: flex;
+          flex-direction: column;
           gap: 1rem;
           align-items: stretch;
-          height: auto;
-          @media (max-width: 768px) {
-            grid-template-columns: 1fr;
+          @media (min-width: 1024px) {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: stretch;
           }
         `}
       >
         {stackCompetences.length > 0 && (
           <div
-            class="flex flex-col gap-4 md:gap-5 lg:gap-6 h-full"
+            class="flex flex-col gap-4 md:gap-5 lg:gap-6 h-full w-full"
             style={`
               display: grid;
               grid-template-columns: repeat(${
                 stackCompetences.length === 1
                   ? 1
-                  : stackCompetences.length === 2
-                    ? 1
-                    : stackCompetences.length <= 4
-                      ? 1
-                      : 2
-              }, 1fr);
+                  : stackCompetences.length === 3
+                    ? 2
+                    : stackCompetences.length === 4
+                      ? 2
+                      : stackCompetences.length === 5 || stackCompetences.length === 7
+                        ? 2
+                        : stackCompetences.length === 6 || stackCompetences.length === 8
+                          ? 2
+                          : 2
+              }, minmax(0, 1fr));
               gap: 1rem;
-              width: fit-content;
-              height: 100%;
+              width: 100%;
               align-items: stretch;
               auto-rows: 1fr;
+              @media (min-width: 1024px) {
+                width: fit-content;
+                grid-template-columns: repeat(${
+                  stackCompetences.length === 1
+                    ? 1
+                    : stackCompetences.length === 2
+                      ? 1
+                      : stackCompetences.length <= 4
+                        ? 1
+                        : 2
+                }, 1fr);
+                height: 100%;
+              }
             `}
           >
             {stackCompetences.map((comp, index) => {
               const length = stackCompetences.length;
               let colSpan = 1;
+              let rowSpan = 1;
 
-              if (length >= 5) {
-                if (length === 5) {
-                  if (index === 0) colSpan = 2;
-                } else if (length === 6) {
-                  if (index === 0 || index === 5) colSpan = 2;
-                } else if (length === 7) {
-                  if (index === 0) colSpan = 2;
-                } else if (length === 8) {
+              // Logique mobile/tablette (< lg)
+              if (length === 3) {
+                if (index === 0) {
+                  colSpan = 2;
+                  rowSpan = 1;
+                }
+              } else if (length === 5) {
+                if (index === 0) {
+                  colSpan = 2;
+                  rowSpan = 1;
+                }
+              } else if (length === 7) {
+                if (index === 0) {
+                  colSpan = 2;
+                  rowSpan = 1;
                 }
               }
 
+              // Logique desktop (lg+) - à implémenter dans une media query
               return (
                 <div
                   class={`w-full h-full rounded-2xl md:rounded-3xl relative border border-white/10 overflow-hidden flex flex-col items-center justify-center p-4 sm:p-5 md:p-6 min-h-[100px] md:min-h-[120px] transition-all duration-300 hover:shadow-lg bg-white`}
-                  style={`grid-column: span ${colSpan};`}
+                  style={`
+                    grid-column: span ${colSpan};
+                    grid-row: span ${rowSpan};
+                    @media (min-width: 1024px) {
+                      grid-column: span 1;
+                      grid-row: span 1;
+                    }
+                  `}
                 >
                   <div class="w-full relative z-20 flex flex-col items-center justify-center gap-2 md:gap-3">
                     {comp.icone && (
