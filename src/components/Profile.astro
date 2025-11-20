@@ -42,10 +42,10 @@ import DiagArrow from "../assets/diag-arrow.svg";
     &lt;A <span class="text-primary">PROPOS</span> /&gt;
   </h2>
   <div
-    class="max-w-7xl grid gap-4 mt-8 md:mt-10 lg:mt-12 px-4 w-full min-h-[40dvh] md:min-h-[55dvh] lg:h-[70dvh] relative z-10 grid-cols-1 lg:grid-cols-3"
+    class="max-w-7xl grid gap-4 mt-8 md:mt-10 lg:mt-12 px-4 w-full h-auto md:min-h-[55dvh] lg:h-[70dvh] relative z-10 grid-cols-1 lg:grid-cols-3"
   >
     <div
-      class="w-full md:w-3/4 lg:w-full md:max-w-[420px] lg:max-w-none mx-auto h-[40dvh] md:h-[52dvh] lg:h-full rounded-3xl overflow-hidden relative"
+      class="w-full h-auto md:h-[52dvh] lg:h-full md:w-3/4 lg:w-full md:max-w-[420px] lg:max-w-none mx-auto rounded-3xl overflow-hidden relative"
       style="background: radial-gradient(circle at center, #7665F3 0%, #7665F3 38%, #4C39D8 100%);"
     >
       <div class="noise"></div>
@@ -60,7 +60,7 @@ import DiagArrow from "../assets/diag-arrow.svg";
 
     <div class="w-full h-auto flex flex-col gap-4 lg:col-span-2">
       <div
-        class="w-full h-64 md:h-96 lg:h-1/2 rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px]"
+        class="w-full h-auto md:h-96 lg:h-1/2 rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px]"
       >
         <div
           class="absolute inset-0"
@@ -73,7 +73,7 @@ import DiagArrow from "../assets/diag-arrow.svg";
         >
         </div>
         <div
-          class="relative z-20 w-full h-full p-6 md:p-8 flex flex-col justify-between"
+          class="relative z-20 w-full h-auto md:h-full p-6 md:p-8 flex flex-col gap-4 md:gap-6"
         >
           <p class="max-w-[90%] md:max-w-[85%] text-sm md:text-base lg:text-lg">
             Je suis Bryan, développeur web passionné par la création
@@ -83,7 +83,7 @@ import DiagArrow from "../assets/diag-arrow.svg";
             utiles, élégants et accessibles.
           </p>
           <div
-            class="flex flex-col md:flex-row gap-4 justify-between md:items-center"
+            class="flex flex-col md:flex-row gap-4 justify-between md:items-center mt-auto"
           >
             <h2 class="h3 text-base md:text-lg lg:text-xl">Qui suis-je ?</h2>
             <a
@@ -101,7 +101,7 @@ import DiagArrow from "../assets/diag-arrow.svg";
         class="w-full h-fit md:h-96 lg:h-1/2 flex flex-col md:flex-row gap-4"
       >
         <div
-          class="skill-container w-full h-fit md:h-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col justify-between p-6 md:p-8 transition-all duration-300"
+          class="skill-container w-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col gap-4 p-6 md:p-8 md:h-full md:justify-between transition-all duration-300 min-h-fit h-fit"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
         >
           <div class="noise absolute inset-0"></div>
@@ -125,7 +125,7 @@ import DiagArrow from "../assets/diag-arrow.svg";
             </h2>
             <a
               href="#competences"
-              class="btn-skill-link btn btn-primary rounded-full relative flex gap-3 md:gap-0 md:group-hover:gap-3 w-full md:w-10 h-10 md:hover:h-10 justify-between md:justify-center items-center transition-[width,background-color,transform] duration-450 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:justify-between md:hover:w-full group md:ml-auto"
+              class="btn-skill-link btn btn-primary rounded-full relative flex gap-3 md:gap-0 md:group-hover:gap-3 w-full md:w-10 md:hover:w-full h-10 md:hover:h-10 justify-between md:justify-center items-center md:transition-[width,background-color,transform] md:duration-450 md:ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:justify-between group md:ml-auto"
             >
               <span
                 class="text opacity-100 max-w-[200px] md:opacity-0 md:max-w-0 overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-450 ease-out md:group-hover:opacity-100 md:group-hover:max-w-[200px]"
@@ -142,7 +142,7 @@ import DiagArrow from "../assets/diag-arrow.svg";
         </div>
 
         <div
-          class="skill-container contact-container w-full h-fit md:h-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col justify-between p-6 md:p-8 transition-all duration-300"
+          class="skill-container contact-container w-full h-fit rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden flex-1 backdrop-blur-[50px] flex flex-col gap-4 p-6 md:p-8 md:h-full md:justify-between transition-all duration-300"
           style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
         >
           <div class="noise absolute inset-0"></div>
@@ -160,8 +160,8 @@ import DiagArrow from "../assets/diag-arrow.svg";
           >
             <h2 class="h3 text-base md:text-lg lg:text-xl">Contact</h2>
             <a
-              href="#contact"
-              class="btn-skill-link btn btn-primary rounded-full relative flex gap-3 md:gap-0 md:group-hover:gap-3 w-full md:w-10 h-10 md:hover:h-10 justify-between md:justify-center items-center transition-[width,background-color,transform] duration-450 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:justify-between md:hover:w-full group md:ml-auto"
+              href="/contact"
+              class="btn-skill-link btn btn-primary rounded-full relative flex gap-3 md:gap-0 md:group-hover:gap-3 w-full md:w-10 md:hover:w-full h-10 md:hover:h-10 justify-between md:justify-center items-center md:transition-[width,background-color,transform] md:duration-450 md:ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:justify-between group md:ml-auto"
             >
               <span
                 class="text opacity-100 max-w-[200px] md:opacity-0 md:max-w-0 overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-450 ease-out md:group-hover:opacity-100 md:group-hover:max-w-[200px]"
