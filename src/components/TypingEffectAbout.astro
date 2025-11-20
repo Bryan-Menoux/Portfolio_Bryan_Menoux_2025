@@ -1,0 +1,63 @@
+---
+
+---
+
+<div class="relative inline-flex items-end">
+  <div
+    class="text-4xl md:text-6xl font-bold text-white leading-none whitespace-nowrap"
+  >
+    <span class="text-white" id="displayTextAbout"></span>
+    <span
+      class="inline-block w-1 bg-white transition-opacity"
+      id="cursorAbout"
+      style="height: 0.8em;"></span>
+  </div>
+</div>
+
+<script>
+  const text = "A PROPOS DE MOI...";
+  let displayText = "";
+  let isDeleting = false;
+  let showCursor = true;
+
+  const typingSpeed = 100;
+  const deletingSpeed = 50;
+  const delayBetweenWords = 2000;
+  const cursorBlinkSpeed = 500;
+
+  const displayTextEl = document.getElementById("displayTextAbout");
+  const cursorEl = document.getElementById("cursorAbout");
+
+  setInterval(() => {
+    showCursor = !showCursor;
+    if (cursorEl) {
+      cursorEl.classList.toggle("opacity-0");
+    }
+  }, cursorBlinkSpeed);
+
+  function type() {
+    if (!isDeleting) {
+      if (displayText.length < text.length) {
+        displayText = text.slice(0, displayText.length + 1);
+        if (displayTextEl) displayTextEl.textContent = displayText;
+        setTimeout(type, typingSpeed);
+      } else {
+        setTimeout(() => {
+          isDeleting = true;
+          type();
+        }, delayBetweenWords);
+      }
+    } else {
+      if (displayText.length > 0) {
+        displayText = displayText.slice(0, -1);
+        if (displayTextEl) displayTextEl.textContent = displayText;
+        setTimeout(type, deletingSpeed);
+      } else {
+        isDeleting = false;
+        setTimeout(type, typingSpeed);
+      }
+    }
+  }
+
+  type();
+</script>

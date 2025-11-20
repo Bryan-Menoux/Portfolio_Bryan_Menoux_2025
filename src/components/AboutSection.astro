@@ -1,0 +1,88 @@
+---
+import grilles from "../assets/grilles.webp";
+import Photo from "../assets/bryan-menoux-2.webp";
+import Arrow from "../assets/diag-arrow.svg?raw";
+import CV from "../assets/Bryan_Menoux_CV_Developpeur_Web_Fullstack_UI_UX.pdf";
+---
+
+<div
+  class="w-full h-fit bg-center bg-cover flex flex-col items-center py-16 md:py-24 lg:py-32 relative"
+  id="first"
+  style={`background-image: url(${grilles.src});`}
+>
+  <div
+    class="max-w-7xl flex gap-4 mt-8 md:mt-10 lg:mt-12 px-4 w-full min-h-[40dvh] md:min-h-[55dvh] lg:h-[60dvh] relative z-10 flex-col lg:flex-row"
+  >
+    <div class="w-fit md:w-full lg:w-fit">
+      <div
+        class="w-96 h-[40dvh] md:h-[52dvh] lg:h-full md:w-full rounded-3xl overflow-hidden relative px-4 py-4 flex justify-center items-center"
+        style="background: radial-gradient(circle at center, #7665F3 0%, #7665F3 38%, #4C39D8 100%);"
+      >
+        <div class="noise"></div>
+        <img
+          src={Photo.src}
+          alt="Photographie de Bryan Menoux"
+          loading="lazy"
+          class="w-full h-full object-cover md:w-1/2 lg:w-full lg:min-w-[40dvh] relative z-10"
+          style="object-position: center 10%;"
+        />
+      </div>
+    </div>
+
+    <div class="w-full h-auto flex flex-col gap-4">
+      <div
+        class="w-full h-full rounded-3xl relative border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.08),inset_-5px_-5px_15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-[50px]"
+      >
+        <div
+          class="absolute inset-0"
+          style="background: radial-gradient(circle at center, rgba(53, 63, 82, 0.75) 0%, rgba(53, 63, 82, 0.75) 38%, rgba(45, 54, 71, 0.75) 100%);"
+        >
+        </div>
+        <div class="noise absolute inset-0"></div>
+        <div
+          class="absolute inset-0 pointer-events-none bg-linear-to-t from-black/60 to-transparent"
+        >
+        </div>
+        <div
+          class="relative z-20 w-full h-full p-6 md:p-8 lg:p-16 flex flex-col justify-between"
+        >
+          <div class="flex flex-col justify-between h-full min-h-fit gap-16">
+            <div class="flex flex-col gap-4 md:gap-8 lg:gap-12">
+              <h3 class="h3">Qui suis-je ?</h3>
+              <p>
+                Je suis Bryan, développeur web passionné par la création
+                d'expériences numériques modernes et efficaces. Curieux et
+                rigoureux, j'aime relever des défis techniques et transformer
+                des idées en solutions concrètes. Mon objectif : concevoir des
+                projets utiles, élégants et accessibles.
+                <br /><br />
+                Mon parcours m'a permis de développer des compétences solides en
+                front-end avec Astro, React et TailwindCSS, ainsi qu'en back-end
+                avec PocketBase et phpMyAdmin. Cette polyvalence me permet d'aborder
+                chaque projet avec une vision complète et de progresser vers mon
+                objectif de devenir développeur full-stack confirmé.
+                <br /><br />
+                Ce qui m'anime, c'est la volonté d'apprendre en continu, de relever
+                des défis techniques et de transformer des idées en expériences concrètes
+                et utiles.
+              </p>
+            </div>
+            <button
+              id="cv-button"
+              class="btn btn-primary max-w-sm self-end flex items-center justify-center gap-2 rounded-full px-6 py-3"
+            >
+              Accédez à mon CV
+              <Fragment set:html={Arrow} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ cvPath: CV }}>
+  document.getElementById("cv-button")?.addEventListener("click", () => {
+    window.open(cvPath, "_blank", "noopener noreferrer");
+  });
+</script>
