@@ -6,6 +6,7 @@ import Github from "../assets/github.svg";
 import LinkedIn from "../assets/linkedin.svg";
 import Behance from "../assets/behance.svg";
 import Instagram from "../assets/instagram.svg";
+import CV from "../assets/Bryan_Menoux_CV_Developpeur_Web_Fullstack_UI_UX.pdf";
 ---
 
 <footer
@@ -138,9 +139,9 @@ import Instagram from "../assets/instagram.svg";
         </a>
       </div>
 
-      <a
-        href="/cv"
-        class="rounded-3xl relative overflow-hidden backdrop-blur-[50px] p-4 md:p-6 lg:p-8 flex flex-col items-center justify-center col-span-2 row-span-2 md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2 lg:order-2 footer-card"
+      <button
+        id="cv-button"
+        class="rounded-3xl relative overflow-hidden backdrop-blur-[50px] p-4 md:p-6 lg:p-8 flex flex-col items-center justify-center col-span-2 row-span-2 md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2 lg:order-2 footer-card cursor-pointer pointer-events-auto"
         style="background: radial-gradient(circle at center, #7665F3 0%, #7665F3 38%, #4C39D8 100%);"
       >
         <div class="absolute top-6 w-full h-6 bg-transparent z-20"></div>
@@ -157,11 +158,11 @@ import Instagram from "../assets/instagram.svg";
         </div>
 
         <div
-          class="relative z-20 flex flex-col items-start justify-end gap-2 w-full h-full"
+          class="relative z-20 flex flex-col items-start justify-end gap-2 w-full h-full pointer-events-none"
         >
           <h4 class="h4 text-white text-left">MON CV</h4>
         </div>
-      </a>
+      </button>
 
       <a
         href="/#projets"
@@ -234,3 +235,9 @@ import Instagram from "../assets/instagram.svg";
     }
   }
 </style>
+
+<script define:vars={{ cvPath: CV }}>
+  document.getElementById("cv-button")?.addEventListener("click", () => {
+    window.open(cvPath, "_blank", "noopener noreferrer");
+  });
+</script>
